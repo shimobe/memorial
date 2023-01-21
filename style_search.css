@@ -1,0 +1,212 @@
+/* nav plug-in */
+#nav_search_random {
+	padding: 1vw 2vw 1vw 1vw;
+	content : url("icon/random.png");
+	width : 8vw;
+	height : 8vw;
+}
+
+#nav_search_random.disabled {
+	opacity: 0.4;
+}
+
+#search_section {
+	margin-top : 10vw;
+}
+/* inputs section */
+#input_container {
+	display : flex;
+}
+
+#input {
+	width : 84vw;
+	padding : 1vw 1vw;
+	margin : 1.5vw 2vw;
+	height : 10vw;
+	font-size : 5vw;
+}
+
+#switch_container {
+	justify-content: center;
+}
+
+#switch_container>#switch_method {
+	content : url("icon/swap.png");
+	width : 10vw;
+	height : 10vw;
+	margin-top : 1.5vw;
+}
+
+/* song title section */
+.song_name_container {
+	padding : 0vw 1vw;
+	margin : 1.5vw 1.5vw;
+	text-align : center;
+	display : flex;
+	border : none;
+	border-radius : 1.2vw;
+	position : sticky;
+	position : -webkit-sticky;
+	top : 10vw;
+}
+
+.song_name_container.odd_colour {
+	background-color : LightYellow;
+}
+
+.song_name_container.even_colour {
+	background-color : PeachPuff;
+}
+
+.song_rap{
+	flex-grow: 1;
+}
+
+.song_name {
+	font-weight : bold;
+	font-size : 6vw;
+}
+
+.song_credit:not(.long_credit) {
+	font-size : 3.2vw;
+}
+
+.song_credit.long_credit {
+	font-size : 2.4vw;
+}
+
+.song_icon_container {
+	flex-direction : column;
+}
+
+.song_fold_icon:not(.closed) {
+	content : url("icon/list_up.png");
+	width : 6vw;
+	height : 6vw;
+	align-items : center;
+	margin: 5px 5px 5px 0;
+	flex-grow : 1;
+}
+
+.song_fold_icon.closed {
+	content : url("icon/list_down.png");
+	width : 6vw;
+	height : 6vw;
+	align-items : center;
+	margin: 5px 5px 5px 0;
+}
+
+.song_copy_icon {
+	content : url("icon/copy.png");
+	width : 6vw;
+	height : 6vw;
+	z-index : 2;
+}
+
+/* song entry section */
+.entry_container {
+	font-weight : bold;
+	font-size : 3.6vw;
+	padding : 1vw;
+	margin : 1.5vw 3.2vw;
+	border : none;
+	border-radius : 0.8vw;
+}
+
+.entry_primary {
+	display : flex;
+}
+
+.entry_date {
+	flex-grow : 1;
+	width : 34vw;
+	margin : 0vw 2vw;
+}
+
+.entry_singer {
+	flex-grow : 1;
+	width : 34vw;
+}
+
+.mem_display {
+	flex-grow : 1;
+	width : 14vw;
+}
+
+.entry_share {
+	content : url("icon/share.png");
+	width : 6vw;
+	height : 6vw;
+}
+
+.entry_note {
+	font-size : 2.7vw;
+	margin : 0vw 2.5vw;
+}
+
+
+/* singer colour palette section */
+/* kirara (4) cc : 5.14 */
+.singer_4 {
+	background-color : LightCoral;
+	color : #670000;
+}
+.singer_4m {
+	background-color : #670000;
+	color : LightCoral;
+}
+/* kirania (5) cc : 5.39 */
+.singer_5 {
+	background-color : #991D1D;
+	color : LightBlue;
+}
+/* momokira (6) cc : 5.57 */
+.singer_6 {
+	background-color : #D98EED;
+	color : Indigo;
+}
+/* petitcoco (7) cc : 6.55 */
+.singer_7 {
+	background-color : #6E24B7;
+	color : #E0E7FF;
+}
+
+
+/* search autocomplete section */
+#search_auto {
+	position : absolute;
+	left : 3vw;
+	top : 22vw;
+	border : 1vw solid GhostWhite;
+	background-color : LightGreen;
+}
+
+.auto_panel {
+	height : 12vw;
+	width : 80vw;
+	overflow : hidden;
+	white-space : nowrap;
+}
+
+.auto_panel:not(.auto_first) {
+	border-top : 0.5vw solid GhostWhite;
+}
+
+/* like i know theres aint no hover on a damn mobile site */
+.auto_panel:hover {
+	background-color : MediumSeaGreen;
+}
+
+.auto_reading {
+	position: relative;
+	transform: translateY(40%);
+	padding : 0.5vw;
+	font-size : 3.2vw;
+	height : 4vw;
+}
+
+.auto_display {
+	padding : 0.25vw;
+	font-size : 4.8vw;
+	height : 6vw;
+}
