@@ -1,0 +1,80 @@
+#home_section {
+	margin-top : 10vw;
+}
+
+#home_title {
+	padding : 10vw 0vw;
+	text-align : center;
+	font-size : 12vw;
+	font-weight : bold;
+}
+
+#home_section>*:not(#chama_visual_warp) {
+	position: relative;
+}
+
+#chama_visual_display {
+	position : fixed;
+	opacity: 0.666;
+	height : 85vh;
+	width : auto;
+	right : 0;
+	bottom : 0vh;
+	transform: translate(40vw, 0);
+}
+
+#chama_visual_display.clothe0 {
+	content : url("https://noripro.jp/wp-content/themes/noripro_v2.1.4/img/talent/oma/image_0.webp?v2.1.4");
+}
+
+#chama_visual_display.clothe1 {
+	content : url("https://noripro.jp/wp-content/themes/noripro_v2.1.4/img/talent/oma/image_1.webp?v2.1.4");
+}
+
+#chama_visual_display.clothe2 {
+	content : url("https://noripro.jp/wp-content/themes/noripro_v2.1.4/img/talent/oma/image_2.webp?v2.1.4");
+}
+
+.home_block {
+	padding : 2vw;
+	margin : 0 0 10vw 10vw;
+	width : 72vw;
+	left : 12vw;
+	background-color : rgba(255, 255, 255, 0.7);
+	border : none;
+	border-radius : 2vw;
+	font-size : 5.4vw;
+}
+
+.home_subtitle {
+	text-align : center;
+}
+
+.home_subtitle_info {
+	text-align : right;
+	font-size : 3.2vw;
+}
+
+.home_subtitle_info.do_underline {
+	border-bottom : 0.2vw solid Black;
+}
+
+.home_gridcontent {
+	display : grid;
+	grid-template-columns: 60% 40%;
+}
+
+.home_gridsong {
+	display : grid;
+	grid-template-columns: 66% 34%;
+}
+
+.home_gridcontent>.col-1 {
+	text-align : right;
+	margin-right : 1.6vw;
+}
+
+.home_gridsong>.col-1 {
+	text-align : right;
+	margin-right : 3.2vw;
+}
