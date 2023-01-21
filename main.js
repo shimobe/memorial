@@ -40,7 +40,7 @@ var video_idx = {
 	date : 1
 };
 
-var version = "1.0.0";
+var version = "1.1.0";
 
 /* control / memories */
 
@@ -48,7 +48,7 @@ var version = "1.0.0";
 var prevent_menu_popup = false;
 
 // current page name
-var current_page = "search";
+var current_page = "home";
 
 
 /* setting section */
@@ -68,6 +68,23 @@ var do_random_anyway = false;
 var entry_proc = [];
 
 $(document).ready(function() {
+	if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
+		// on mobile, do nothing
+	} else {
+		// check screen ratio
+		// and hope nobody use some super-duper long screen
+		if (window.innerHeight / window.innerWidth < 1.3) {
+			// bad screen ratio, open new window
+			$("#v_screen").addClass("post_switch");
+			$("#v_screen").height("100%");
+			$("#v_screen").width(0.5625 * window.innerHeight);
+			$("#v_screen").attr("src", "index.html");
+			// hide original page
+			$("body > div").addClass("post_switch");
+			$("body").addClass("post_switch");
+			return;
+		}
+	}
 	init();
 });
 
@@ -159,12 +176,21 @@ $(function() {
 				// show / hide section
 				$(".section_container").addClass("hidden");
 				switch (target) {
+					case "home" : 
+						// show section
+						$("#home_section").removeClass("hidden");
+						$("#nav_search_random").addClass("hidden");
+						$("#nav_share_rep").addClass("hidden");
+						$("#nav_title").html("ホーム");
+						$("#nav_to_top").addClass("hidden");
+						break;
 					case "search" :
 						// show section
 						$("#search_section").removeClass("hidden");
 						$("#nav_search_random").removeClass("hidden");
 						$("#nav_share_rep").addClass("hidden");
 						$("#nav_title").html("曲検索");
+						$("#nav_to_top").removeClass("hidden");
 						// reset input -> reload
 						$("#input").val("");
 						search();
@@ -175,6 +201,7 @@ $(function() {
 						$("#nav_search_random").addClass("hidden");
 						$("#nav_share_rep").removeClass("hidden");
 						$("#nav_title").html("レパートリー");
+						$("#nav_to_top").removeClass("hidden");
 						// do whatever needed
 						$(window).scrollTop(0);
 						rep_search();

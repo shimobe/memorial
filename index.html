@@ -18,19 +18,23 @@
 		<link rel="stylesheet" href="style_repertoire.css">
 	</head>
     <body oncontextmenu="return false;">
+		<iframe id="v_screen" frameBorder="0"></iframe>
 		<div id="navbar">
 			<div id="nav_menu_group">
 				<div href="#" id="nav_menu" class=""></div>
 				<div href="#" id="nav_setting" class="hidden"></div>
 			</div>
-			<div id="nav_title">曲検索</div>
+			<div id="nav_title">ホーム</div>
 			<div id="nav_control_group">
-				<div href="#" id="nav_search_random"></div>
+				<div href="#" id="nav_search_random" class="hidden"></div>
 				<div href="#" id="nav_share_rep" class="hidden disabled"></div>
-				<div href="#" id="nav_to_top"></div>
+				<div href="#" id="nav_to_top" class="hidden"></div>
 			</div>
 		</div>
-		<div id="search_section" class="section_container">
+		<div id="home_section" class="section_container hidden">
+			<><>
+		</div>
+		<div id="search_section" class="section_container hidden">
 			<div id="input_container">
 				<input id="input" type="text" placeholder="曲名/読みで検索">
 				<div id="switch_container">
@@ -177,7 +181,8 @@
 			<div id="menu_panel" class="defog">
 				<span id="menu2page_title">ページ選択</span>
 				<div id="menu2page_container">
-					<div id="menu2page_search" class="menu2page menu2page_selected">曲検索</div>
+					<div id="menu2page_home" class="menu2page menu2page_selected">ホーム</div>
+					<div id="menu2page_search" class="menu2page">曲検索</div>
 					<div id="menu2page_repertoire" class="menu2page">レパートリー一覧</div>
 				</div>
 				<div id="menu_bottom">
