@@ -13,25 +13,25 @@
 	position: relative;
 }
 
-#chama_visual_display {
+.chama_visual_display {
 	position : fixed;
 	opacity: 0.666;
 	height : 85vh;
 	width : auto;
 	right : 0;
 	bottom : 0vh;
-	transform: translate(40vw, 0);
+	transform: translate(40%, 0);
 }
 
-#chama_visual_display.clothe0 {
+.chama_visual_display.clothe0 {
 	content : url("https://noripro.jp/wp-content/themes/noripro_v2.1.4/img/talent/oma/image_0.webp?v2.1.4");
 }
 
-#chama_visual_display.clothe1 {
+.chama_visual_display.clothe1 {
 	content : url("https://noripro.jp/wp-content/themes/noripro_v2.1.4/img/talent/oma/image_1.webp?v2.1.4");
 }
 
-#chama_visual_display.clothe2 {
+.chama_visual_display.clothe2 {
 	content : url("https://noripro.jp/wp-content/themes/noripro_v2.1.4/img/talent/oma/image_2.webp?v2.1.4");
 }
 
@@ -77,4 +77,40 @@
 .home_gridsong>.col-1 {
 	text-align : right;
 	margin-right : 3.2vw;
+}
+
+#home_timeline {
+	display : grid;
+}
+
+#tl_line::before {
+	content : "　　";
+	position : relative;
+	top : -2vw;
+	left : -1.8vw;
+	width : 4vw;
+	height : 4vw;
+	background-color : Thistle;
+	border : 1vw solid LightPink;
+	border-radius : 3vw;
+	font-size : 2vw;
+}
+
+#tl_line {
+	grid-column : 1;
+	grid-row : 1;
+	position : relative;
+	height : 400vh;
+	width : 2vw;
+	left : 8vw;
+	background-color : Thistle;
+}
+
+#tl_line::after {
+	content : "";
+	display : block;
+	position : relative;
+	height : 100vh;
+	width : 2vw;
+	background-image : linear-gradient(to bottom, Thistle, rgba(0, 0, 0, 0));
 }

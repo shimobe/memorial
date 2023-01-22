@@ -40,7 +40,7 @@ var video_idx = {
 	date : 1
 };
 
-var version = "1.1.1b";
+var version = "1.1.2";
 
 /* control / memories */
 
@@ -50,6 +50,9 @@ var prevent_menu_popup = false;
 // current page name
 var current_page = "home";
 
+// home total height
+var home_height = 0;
+var home_change_visual = [{start : 0, end : 0}, {start : 0, end : 0}];
 
 /* setting section */
 // max display song count
@@ -152,6 +155,40 @@ $(function() {
 			$("html,body").animate({
 				scrollTop: 0
 			}, "fast");
+		});
+	}
+	
+	{ // home
+		$(window).on("scroll", function() {
+			if (current_page !== "home") {
+				return;
+			}
+			var cur_scroll = $(this).scrollTop();
+			for (var i = 0; i < 2; ++i) {
+				if ((home_change_visual[i].start < cur_scroll) && (cur_scroll < home_change_visual[i].end)) {
+					var ratio = (cur_scroll - home_change_visual[i].start) / (home_change_visual[i].end - home_change_visual[i].start);
+					$(".clothe" + i).removeClass("hidden");
+					$(".clothe" + i).css("opacity", 0.666 * (1 - ratio ** 2));
+					$(".clothe" + (i + 1)).removeClass("hidden");
+					$(".clothe" + (i + 1)).css("opacity", 0.666 * (1 - ( 1 - ratio) ** 2));
+					return;
+				} else {
+					// hide others
+					if (cur_scroll < home_change_visual[0].start) {
+						$(".clothe0").removeClass("hidden");
+						$(".clothe1").addClass("hidden");
+						$(".clothe0").css("opacity", 0.666);
+					} else if (cur_scroll < home_change_visual[1].start) {
+						$(".clothe0").addClass("hidden");
+						$(".clothe2").addClass("hidden");
+						$(".clothe1").css("opacity", 0.666);
+					} else {
+						$(".clothe1").addClass("hidden");
+						$(".clothe2").removeClass("hidden");
+						$(".clothe2").css("opacity", 0.666);
+					}
+				}
+			}
 		});
 	}
 	
@@ -333,6 +370,7 @@ $(function() {
 });
 
 function init() {
+	// $(window).scrollTop($("#home_section").offset().top);
 	$("#input").val("");
 	// process data
 	for (var i in song) {
@@ -361,6 +399,13 @@ function init() {
 		// remove the non-singer bit, not needed.
 		rep_list[i] &= ~8;
 	}
+	// load home values
+	home_height = $("#home_section").height() - window.innerHeight;
+	var section_height = home_height / 3;
+	home_change_visual[0].start =     section_height - section_height * 0.2;
+	home_change_visual[0].end   =     section_height + section_height * 0.2;
+	home_change_visual[1].start = 2 * section_height - section_height * 0.2;
+	home_change_visual[1].end   = 2 * section_height + section_height * 0.2;
 }
 
 // functional functions
