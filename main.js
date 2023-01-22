@@ -40,7 +40,7 @@ var video_idx = {
 	date : 1
 };
 
-var version = "1.1.2";
+var version = "1.1.3";
 
 /* control / memories */
 
@@ -401,11 +401,11 @@ function init() {
 	}
 	// load home values
 	home_height = $("#home_section").height() - window.innerHeight;
-	var section_height = home_height / 3;
-	home_change_visual[0].start =     section_height - section_height * 0.2;
-	home_change_visual[0].end   =     section_height + section_height * 0.2;
-	home_change_visual[1].start = 2 * section_height - section_height * 0.2;
-	home_change_visual[1].end   = 2 * section_height + section_height * 0.2;
+	var section_height = home_height / 11;
+	home_change_visual[0].start = section_height * 3;
+	home_change_visual[0].end   = section_height * 4;
+	home_change_visual[1].start = section_height * 7;
+	home_change_visual[1].end   = section_height * 8;
 }
 
 // functional functions
