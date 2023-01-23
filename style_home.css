@@ -178,6 +178,14 @@
 	height : 36vw;
 }
 
+/* 
+ * timeline numbering
+ *  0 ~ : 1st batch
+ * 40 ~ : recomendation
+ * 80 ~ : birthday, voice
+ *   99 : no background
+ */
+
 .tl_99_nobg {
 	height : auto;
 }
@@ -294,11 +302,18 @@
 	background-image : url("timeline/tl_28-raidori.jpg");
 }
 
-#tl_79_grad {
-	
+#tl_40_amogus {
+	background-image : url("https://img.youtube.com/vi/i6Llc4UDRD8/mqdefault.jpg");
+}
+
+#tl_41_gettingoverit {
+	background-image : url("https://img.youtube.com/vi/Qp6y6lN10N4/mqdefault.jpg");
 }
 
 
+#tl_79_grad {
+	
+}
 
 #tl_80_bd21 {
 	background-image : url("https://img.youtube.com/vi/t9na_F99zcY/mqdefault.jpg");
