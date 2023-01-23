@@ -95,33 +95,45 @@
 
 .tl_year_block {
 	display : grid;
-	grid-template-columns: 20% 80%;
+	grid-template-columns: 15% 85%;
 }
 
-.tl_year_container {
+.tl_year_container,
+.tl_month_container {
+	margin-top : 1.5vw;
 	text-align : center;
 	font-weight : bold;
 }
 
-.tl_year_container>span {
+.tl_year_container>span,
+.tl_month_container>span {
+	position : sticky;
+	position : -webkit-sticky;
+	top : 11.2vw;
 	background-color : LightBlue;
 	border-radius : 2vw;
 	padding : 1.2vw;
 	vertical-align : middle;
 }
 
-.tl_year_container {
-	grid-column : 0 span;
+.tl_month_container>span {
+	background-color : LightCyan;
+}
+
+.tl_month_block {
+	display : grid;
+	grid-template-columns: 10% 90%;
 }
 
 .tl_item {
 	display : grid;
-	background-color : LightSkyBlue;
+/*	background-color : LightSkyBlue;*/
+	background-color : rgba(135, 206, 250, 0.333);
 	border-radius : 2vw;
 	padding : 1.2vw;
 	width : 64vw;
 	height : auto;
-	margin-bottom : 3vw;
+	margin : 0 0 3vw 2vw;
 }
 
 .tl_bgimg {
@@ -132,10 +144,11 @@
 .tl_item_content {
 	grid-column : 1;
 	grid-row : 1;
-	z-index : 2;
+	z-index : 1;
 }
 
 .tl_item_date {
+	padding : 1.2vw;
 	font-size : 6vw;
 	font-weight : bold;
 	color : white;
@@ -145,6 +158,7 @@
 
 .tl_item_details {
 	padding : 2.4vw;
+	line-height : 1em;
 }
 
 .tl_item_details>div {
@@ -155,8 +169,7 @@
 	-webkit-text-stroke-color : White;
 }
 
-#tl_0_debut {
-	background-image : url("timeline/tl_0-debut.jpg");
+.tl_bgimg {
 	opacity: 0.4;
 	background-size : cover;
 	background-repeat : no-repeat;
@@ -165,12 +178,158 @@
 	height : 36vw;
 }
 
+.tl_99_nobg {
+	height : auto;
+}
+
+#tl_0_debut {
+	background-image : url("timeline/tl_0-debut.jpg");
+}
+
 #tl_1_1sttweet {
 	background-image : url("timeline/tl_1-1sttweet.jpg");
-	opacity: 0.4;
-	background-size : cover;
-	background-repeat : no-repeat;
-	border-radius : 2vw;
-	width : 64vw;
 	height : 48vw;
+}
+
+#tl_3_selfintro {
+	background-image : url("https://img.youtube.com/vi/JNx93U-QbA0/mqdefault.jpg");
+}
+
+#tl_4_1ststream {
+	background-image : url("https://img.youtube.com/vi/vJOA_6a0xrk/mqdefault.jpg");
+}
+
+#tl_6_monetise {
+	background-image : url("timeline/tl_6-monetise.jpg");
+	height : 45vw;
+}
+
+#tl_7_membership {
+	background-image : url("timeline/tl_7-membership.jpg");
+}
+
+#tl_8_1stcollab {
+	background-image : url("https://img.youtube.com/vi/xXuv2r9SCyg/mqdefault.jpg");
+}
+
+#tl_9_30k {
+	background-image : url("timeline/tl_9-30k.jpg");
+	height : 44vw;
+}
+
+#tl_10_1stselfcollab {
+	background-image : url("timeline/tl_10-1stselfcollab.jpg");
+}
+
+#tl_11_40k {
+	background-image : url("timeline/tl_11-40k.jpg");
+	height : 55vw;
+}
+
+#tl_12_samurai {
+	background-image : url("https://img.youtube.com/vi/krPNxPCpPWU/mqdefault.jpg");
+}
+
+#tl_13_2ndgenmusical {
+	background-image : url("timeline/tl_13-2ndgenmusical.jpg");
+}
+
+#tl_14_3side {
+	background-image : url("timeline/tl_14-3side.jpg");
+}
+
+#tl_15_1stoffcollab {
+	background-image : url("https://img.youtube.com/vi/3mYWoJtcFMU/mqdefault.jpg");
+}
+
+#tl_16_tradition {
+	background-image : url("https://img.youtube.com/vi/8blpML7wScw/mqdefault.jpg");
+}
+
+#tl_17_singingweek {
+	background-image : url("https://img.youtube.com/vi/sqb_jfYe7Wk/mqdefault.jpg");
+}
+
+#tl_18_return0 {
+	background-image : url("https://img.youtube.com/vi/JuVqi_FnsEw/mqdefault.jpg");
+}
+
+#tl_19_norimusic {
+	background-image : url("https://img.youtube.com/vi/jJswjethxOs/mqdefault.jpg");
+}
+
+#tl_20_1anni {
+	background-image : url("https://img.youtube.com/vi/Zzd-HZ7JmYM/mqdefault.jpg");
+}
+
+#tl_21_utamita0 {
+	background-image : url("https://img.youtube.com/vi/Po26gVf6ZfM/mqdefault.jpg");
+}
+
+#tl_22_utamita1 {
+	background-image : url("https://img.youtube.com/vi/qrFEOcAkFjk/mqdefault.jpg");
+}
+
+#tl_23_utamita2 {
+	background-image : url("https://img.youtube.com/vi/od6V6RZdbDM/mqdefault.jpg");
+}
+
+#tl_24_return1 {
+	background-image : url("https://img.youtube.com/vi/hZt5ncwE0mI/mqdefault.jpg");
+}
+
+#tl_25_outfit0 {
+	background-image : url("https://img.youtube.com/vi/Q23UnganqG0/mqdefault.jpg");
+}
+
+#tl_26_outfit1 {
+	background-image : url("https://img.youtube.com/vi/KXZCLRyaKVU/mqdefault.jpg");
+}
+
+#tl_27_gradan {
+	background-image : url("https://img.youtube.com/vi/4mWriCMjymE/mqdefault.jpg");
+}
+
+#tl_28_grad {
+	
+}
+
+
+
+#tl_80_bd21 {
+	background-image : url("https://img.youtube.com/vi/t9na_F99zcY/mqdefault.jpg");
+}
+
+#tl_81_voicebd21 {
+	background-image : url("https://booth.pximg.net/0d2a16e6-a44a-4735-b24f-1c9b07ee282e/i/3073415/0e7d83e9-9f4d-4a14-b31d-56f00ef0bb16.jpg");
+	height : 64vw;
+	opacity: 0.8;
+}
+
+#tl_82_voice1st {
+	background-image : url("https://booth.pximg.net/0d2a16e6-a44a-4735-b24f-1c9b07ee282e/i/3486719/7a012120-1617-4f8b-a2d8-42ee23f7a7d0.jpg");
+	height : 64vw;
+	opacity: 0.8;
+}
+
+#tl_83_voice1anni {
+	background-image : url("https://booth.pximg.net/0d2a16e6-a44a-4735-b24f-1c9b07ee282e/i/3722740/1dcf37e6-d59a-48c8-b1e6-aca6abd1d2e6.jpg");
+	height : 64vw;
+	opacity: 0.8;
+}
+
+#tl_84_bd22 {
+	background-image : url("https://img.youtube.com/vi/PhGYWJOgDXs/mqdefault.jpg");
+}
+
+#tl_85_voicebd22 {
+	background-image : url("https://booth.pximg.net/0d2a16e6-a44a-4735-b24f-1c9b07ee282e/i/3845383/ab587993-4f05-409f-ac84-a245ce8e69d2.jpg");
+	height : 64vw;
+	opacity: 0.8;
+}
+
+#tl_86_voicegrad {
+	background-image : url("https://booth.pximg.net/0d2a16e6-a44a-4735-b24f-1c9b07ee282e/i/4415051/76e984f5-33d6-4df7-bdbd-1b976c996070.jpg");
+	height : 64vw;
+	opacity: 0.8;
 }

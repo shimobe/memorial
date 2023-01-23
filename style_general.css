@@ -156,6 +156,7 @@ body.post_switch {
 	height : calc(100% - 10vw);
 	width : 100%;
 	background : rgba(30, 30, 30, 0.5);
+	z-index : 2;
 }
 
 #menu_panel {
@@ -229,6 +230,7 @@ body.post_switch {
 	top : 10vw;
 	height : calc(100% - 10vw);
 	width : 100%;
+	z-index : 2;
 }
 
 /* info section */
@@ -266,6 +268,16 @@ body.post_switch {
 .twitter {
 	color : White;
 	background-color : #1DA1F2;
+	border: none;
+	border-radius: 2vw;
+	padding : 0.5vw 2vw;
+	font-weight : bold;
+	width: fit-content;
+}
+
+.youtube {
+	color : White;
+	background-color : #FF0000;
 	border: none;
 	border-radius: 2vw;
 	padding : 0.5vw 2vw;
