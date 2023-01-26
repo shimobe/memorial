@@ -40,7 +40,7 @@ var video_idx = {
 	date : 1
 };
 
-var version = "1.1.6";
+var version = "1.1.7";
 
 /* control / memories */
 
@@ -89,6 +89,27 @@ $(document).ready(function() {
 		}
 	}
 	init();
+	// get values from data
+	$("#home_count_song").html(entry.length + "回");
+	var rep_count = 0;
+	for (var i in entry_proc) {
+		rep_count += entry_proc[i].length === 0 ? 0 : 1;
+	}
+	$("#home_count_rep").html(rep_count + "曲");
+	// set ranking
+	var e = [...Array(song.length).keys()];
+	e.sort(function(a, b) {
+		return entry_proc[b].length - entry_proc[a].length;
+	});
+	var new_html = "";
+	var loaded_records = 0,
+		lastest_count = -1;
+	do {
+		new_html += "<div class=\"row-" + (loaded_records + 1) + " col-1\">" + song[e[loaded_records]][song_idx.name] + "</div>";
+		new_html += "<div class=\"row-" + (loaded_records + 1) + " col-2\">" + entry_proc[e[loaded_records]].length + "回</div>";
+		loaded_records++;
+	} while (!(loaded_records >= 10 && lastest_count != entry_proc[e[loaded_records + 1]].length));
+	$(".home_gridsong").html(new_html);
 });
 
 $(function() {
@@ -216,32 +237,44 @@ $(function() {
 					case "home" : 
 						// show section
 						$("#home_section").removeClass("hidden");
+						$("#nav_title").html("ホーム");
 						$("#nav_search_random").addClass("hidden");
 						$("#nav_share_rep").addClass("hidden");
-						$("#nav_title").html("ホーム");
-						$("#nav_to_top").addClass("hidden");
+						$("#nav_dummy").removeClass("hidden");
+						$(window).scrollTop(0);
 						break;
 					case "search" :
 						// show section
 						$("#search_section").removeClass("hidden");
+						$("#nav_title").html("曲検索");
 						$("#nav_search_random").removeClass("hidden");
 						$("#nav_share_rep").addClass("hidden");
-						$("#nav_title").html("曲検索");
-						$("#nav_to_top").removeClass("hidden");
+						$("#nav_dummy").addClass("hidden");
 						// reset input -> reload
 						$("#input").val("");
+						$(window).scrollTop(0);
 						search();
 						break;
 					case "repertoire" : 
 						// show section
 						$("#repertoire_section").removeClass("hidden");
+						$("#nav_title").html("レパートリー");
 						$("#nav_search_random").addClass("hidden");
 						$("#nav_share_rep").removeClass("hidden");
-						$("#nav_title").html("レパートリー");
-						$("#nav_to_top").removeClass("hidden");
+						$("#nav_dummy").addClass("hidden");
 						// do whatever needed
 						$(window).scrollTop(0);
 						rep_search();
+						break;
+					case "stream" :
+						// show section
+						$("#stream_section").removeClass("hidden");
+						$("#nav_title").html("配信一覧");
+						$("#nav_search_random").addClass("hidden");
+						$("#nav_share_rep").addClass("hidden");
+						$("#nav_dummy").removeClass("hidden");
+						
+						$(window).scrollTop(0);
 						break;
 				}
 				

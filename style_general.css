@@ -132,10 +132,16 @@ body.post_switch {
 	text-align : right;
 }
 
-#nav_search_random ,#nav_share_rep {
+#nav_search_random ,#nav_share_rep, #nav_dummy {
 	grid-column : 1;
 	grid-row : 1;
 	
+}
+
+#nav_dummy {
+	padding: 1vw 2vw 1vw 1vw;
+	width : 8vw;
+	height : 8vw;
 }
 
 #nav_to_top {
