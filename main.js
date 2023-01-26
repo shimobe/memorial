@@ -40,7 +40,7 @@ var video_idx = {
 	date : 1
 };
 
-var version = "1.1.8";
+var version = "1.1.9";
 
 /* control / memories */
 
@@ -89,6 +89,7 @@ $(document).ready(function() {
 		}
 	}
 	init();
+	update_visual();
 	// get values from data
 	$("#home_count_song").html(entry.length + "回");
 	var rep_count = 0;
@@ -184,32 +185,8 @@ $(function() {
 			if (current_page !== "home") {
 				return;
 			}
-			var cur_scroll = $(this).scrollTop();
-			for (var i = 0; i < 2; ++i) {
-				if ((home_change_visual[i].start < cur_scroll) && (cur_scroll < home_change_visual[i].end)) {
-					var ratio = (cur_scroll - home_change_visual[i].start) / (home_change_visual[i].end - home_change_visual[i].start);
-					$(".clothe" + i).removeClass("hidden");
-					$(".clothe" + i).css("opacity", 0.666 * (1 - ratio ** 2));
-					$(".clothe" + (i + 1)).removeClass("hidden");
-					$(".clothe" + (i + 1)).css("opacity", 0.666 * (1 - ( 1 - ratio) ** 2));
-					return;
-				} else {
-					// hide others
-					if (cur_scroll < home_change_visual[0].start) {
-						$(".clothe0").removeClass("hidden");
-						$(".clothe1").addClass("hidden");
-						$(".clothe0").css("opacity", 0.666);
-					} else if (cur_scroll < home_change_visual[1].start) {
-						$(".clothe0").addClass("hidden");
-						$(".clothe2").addClass("hidden");
-						$(".clothe1").css("opacity", 0.666);
-					} else {
-						$(".clothe1").addClass("hidden");
-						$(".clothe2").removeClass("hidden");
-						$(".clothe2").css("opacity", 0.666);
-					}
-				}
-			}
+			update_visual($(this).scrollTop());
+
 		});
 	}
 	
@@ -242,6 +219,7 @@ $(function() {
 						$("#nav_share_rep").addClass("hidden");
 						$("#nav_dummy").removeClass("hidden");
 						$(window).scrollTop(0);
+						update_visual(0);
 						break;
 					case "search" :
 						// show section
@@ -439,6 +417,35 @@ function init() {
 	home_change_visual[0].end   = section_height * 4;
 	home_change_visual[1].start = section_height * 7;
 	home_change_visual[1].end   = section_height * 8;
+}
+
+function update_visual(cur_scroll = 0) {
+	for (var i = 0; i < 2; ++i) {
+		if ((home_change_visual[i].start < cur_scroll) && (cur_scroll < home_change_visual[i].end)) {
+			var ratio = (cur_scroll - home_change_visual[i].start) / (home_change_visual[i].end - home_change_visual[i].start);
+			$(".clothe" + i).removeClass("hidden");
+			$(".clothe" + i).css("opacity", 0.666 * (1 - ratio ** 2));
+			$(".clothe" + (i + 1)).removeClass("hidden");
+			$(".clothe" + (i + 1)).css("opacity", 0.666 * (1 - ( 1 - ratio) ** 2));
+			return;
+		} else {
+			// hide others
+			if (cur_scroll < home_change_visual[0].start) {
+				$(".clothe0").removeClass("hidden");
+				$(".clothe1").addClass("hidden");
+				$(".clothe2").addClass("hidden");
+				$(".clothe0").css("opacity", 0.666);
+			} else if (cur_scroll < home_change_visual[1].start) {
+				$(".clothe0").addClass("hidden");
+				$(".clothe2").addClass("hidden");
+				$(".clothe1").css("opacity", 0.666);
+			} else {
+				$(".clothe1").addClass("hidden");
+				$(".clothe2").removeClass("hidden");
+				$(".clothe2").css("opacity", 0.666);
+			}
+		}
+	}
 }
 
 // functional functions
