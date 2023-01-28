@@ -40,7 +40,7 @@ var video_idx = {
 	date : 1
 };
 
-var version = "1.1.9";
+var version = "1.1.10";
 
 /* control / memories */
 
@@ -90,6 +90,29 @@ $(document).ready(function() {
 	}
 	init();
 	update_visual();
+	
+	$("#home_note_stream").html("(" + stream[stream.length - 1][str_idx.date].slice(0, 10) + "迄)");
+	$("#home_note_song").html("(" + stream[stream.length - 1][str_idx.date].slice(0, 10) + "迄, メン限/非公開/他枠含む)")
+	
+	var c_stream  = 0,
+		c_member  = 0,
+		c_singing = 0,
+		c_asmr    = -1,	// counter 
+		c_slcolab = 0;
+	for (var i in stream) {
+		c_stream  += (stream[i][str_idx.attr] & (1 << str_attr.othercolab[1])) ? 0 : 1;
+		c_member  += (stream[i][str_idx.attr] & (1 << str_attr.member[1])) ? 1 : 0;
+		c_singing += ((stream[i][str_idx.attr] & (1 << str_tag.singing[1])) && !(stream[i][str_idx.attr] & (1 << str_attr.othercolab[1]))) ? 1 : 0;
+		c_asmr    += ((stream[i][str_idx.attr] & (1 << str_tag.asmr[1])) && !(stream[i][str_idx.attr] & (1 << str_attr.othercolab[1]))) ? 1 : 0;
+		c_slcolab += (stream[i][str_idx.attr] & (1 << str_attr.selfcolab[1])) ? 1 : 0;
+	}
+	
+	$("#home_count_stream").html(c_stream + "回");
+	$("#home_count_member").html(c_member + "回");
+	$("#home_count_singing").html(c_singing + "回");
+	$("#home_count_asmr").html(c_asmr + "回");
+	$("#home_count_selfcollab").html(c_slcolab + "回");
+	
 	// get values from data
 	$("#home_count_song").html(entry.length + "回");
 	var rep_count = 0;

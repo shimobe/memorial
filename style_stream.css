@@ -9,3 +9,89 @@
 	height : 10vw;
 	font-size : 5vw;
 }
+
+.str_search_block {
+	height : auto;
+	width : 92vw;
+	margin : 2.4vw 2vw;
+	padding : 2vw;
+	border-radius : 1.2vw;
+	background-color : PaleGreen;
+	font-size : 4vw;
+	color : Black;
+	font-weight : bold;
+}
+
+.str_search_title {
+	display : flex;
+}
+
+.str_tag_name {
+	flex-grow : 1;
+	font-size : 4.8vw;
+}
+
+.str_close:not(.closed) {
+	content : url("icon/list_up.png");
+	width : 6vw;
+	height : 6vw;
+	align-items : center;
+	margin: 5px 5px 5px 0;
+}
+
+.str_close.closed {
+	content : url("icon/list_down.png");
+	width : 6vw;
+	height : 6vw;
+	align-items : center;
+	margin: 5px 5px 5px 0;
+}
+
+.str_search_subtitle {
+	border-bottom : 0.5vw solid Black;
+	width : 80vw;
+	margin : 2vw 0vw;
+	padding-left : 3.6vw;
+}
+
+.str_search_content {
+	background-color : PaleTurquoise;
+	border-radius : 1.4vw;
+	padding : 1.5vw;
+	margin-bottom : 1vw;
+}
+
+.str_search_options {
+	display : grid;
+	grid-template-columns: 30% 35% 35%;
+}
+
+.str_tag_button,
+.str_attr_button,
+.str_method_button,
+.str_sort_button {
+	display : flex;
+}
+
+.str_tag_checkbox,
+.str_checkbox {
+	width : 6vw;
+	height : 6vw;
+	margin : 0.6vw;
+}
+
+.str_tag_checkbox.selected,
+.str_checkbox.selected {
+	content : url("icon/str_check.png");
+}
+
+.str_tag_checkbox.str_tag_and:not(.selected),
+.str_checkbox:not(.selected) {
+	content : url("icon/str_cross.png");
+}
+
+#str_checkbox_tag_all:not(.selected),
+#str_checkbox_game_all:not(.selected),
+.str_tag_checkbox:not(.str_tag_and):not(.selected) {
+	content : url("icon/str_minus.png");
+}

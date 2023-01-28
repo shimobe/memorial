@@ -46,18 +46,18 @@
 				<div id="home_title">きららの歩み</div>
 				<div class="home_block">
 					<div class="home_subtitle">今までの配信</div>
-					<div class="home_subtitle_info do_underline">(2023-01-25迄)</div>
+					<div id="home_note_stream" class="home_subtitle_info do_underline">(2023-01-25迄)</div>
 					<div class="home_gridcontent">
-						<div class="row-1 col-1">配信回数：</div><div class="row-1 col-2">455回</div>
-						<div class="row-2 col-1">メン限配信：</div><div class="row-2 col-2">31回</div>
-						<div class="row-3 col-1">歌枠：</div><div class="row-3 col-2">164回</div>
-						<div class="row-4 col-1">ASMR配信：</div><div class="row-4 col-2">35回</div>
-						<div class="row-5 col-1">自枠コラボ：</div><div class="row-5 col-2">29回</div>
+						<div class="row-1 col-1">配信回数：</div><div id="home_count_stream" class="row-1 col-2"></div>
+						<div class="row-2 col-1">メン限配信：</div><div id="home_count_member" class="row-2 col-2"></div>
+						<div class="row-3 col-1">歌枠：</div><div id="home_count_singing" class="row-3 col-2"></div>
+						<div class="row-4 col-1">ASMR配信：</div><div id="home_count_asmr" class="row-4 col-2"></div>
+						<div class="row-5 col-1">自枠コラボ：</div><div id="home_count_selfcollab" class="row-5 col-2"></div>
 					</div>
 				</div>
 				<div class="home_block">
 					<div class="home_subtitle">お歌</div>
-					<div class="home_subtitle_info do_underline">(2023-01-25迄, 非公開/他枠含む)</div>
+					<div id="home_note_song" class="home_subtitle_info do_underline">(2023-01-25迄, 非公開/他枠含む)</div>
 					<div class="home_gridcontent">
 						<div class="row-1 col-1">歌った回数：</div><div class="row-1 col-2" id="home_count_song"></div>
 						<div class="row-2 col-1">レパートリー：</div><div class="row-2 col-2" id="home_count_rep"></div>
@@ -686,6 +686,31 @@
 							</div>
 						</div>
 					</div>
+					<div class="tl_year_block">
+						<div class="tl_year_container">
+							<span>eee56</span>
+						</div>
+						<div>
+							<div class="tl_month_block">
+								<div class="tl_month_container">
+									<span>??</span>
+								</div>
+								<div class="tl_inner">
+									<div class="tl_item">
+										<div class="tl_bgimg tl_99_nobg"></div>
+										<div class="tl_item_content">
+											<div class="tl_item_date">
+												????
+											</div>
+											<div class="tl_item_details">
+												<div>デビュー発表</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -835,59 +860,138 @@
 		<div id="stream_section" class="section_container hidden">
 			<input id="str_input" type="text" placeholder="配信タイトルで検索">
 			<div class="str_search_block">
-				<div class="str_search_title">
-					<div class="str_tag_name">内容/属性検索</div>
-					<div class="str_tag_close" class="str_close closed"></div>
+				<div id="str_label_tag" class="str_search_title">
+					<div class="str_tag_name">内容検索</div>
+					<div id="str_close_tag" class="str_close closed"></div>
 				</div>
-				<div class="str_search_content" class="hidden">
+				<div id="str_content_tag" class="str_search_content hidden">
 					<div class="str_search_subtitle">配信内容</div>
 					<div class="str_search_options">
-						<div id="str_tag_op_singing" class="str_tag_button">
-							<div id="str_tag_checkbox_singing" class="str_tag_checkbox selected str_tag_and"></div>
+						<div id="str_op_tag_all" class="str_tag_button">
+							<div id="str_checkbox_tag_all" class="str_gp_tag str_tag_checkbox selected str_tag_and"></div>
+							<div class="str_item_name">全部</div>
+						</div>
+						<div id="str_op_tag_singing" class="str_tag_button">
+							<div id="str_checkbox_tag_singing" class="str_gp_tag str_tag_checkbox selected str_tag_and"></div>
 							<div class="str_item_name">歌枠</div>
 						</div>
-						<div id="str_tag_op_game" class="str_tag_button">
-							<div id="str_tag_checkbox_game" class="str_tag_checkbox selected str_tag_and"></div>
+						<div id="str_op_tag_game" class="str_tag_button">
+							<div id="str_checkbox_tag_game" class="str_gp_tag str_tag_checkbox selected str_tag_and"></div>
 							<div class="str_item_name">ゲーム</div>
 						</div>
-						<div id="str_tag_op_talking" class="str_tag_button">
-							<div id="str_tag_checkbox_talking" class="str_tag_checkbox selected str_tag_and"></div>
+						<div id="str_op_tag_talking" class="str_tag_button">
+							<div id="str_checkbox_tag_talking" class="str_gp_tag str_tag_checkbox selected str_tag_and"></div>
 							<div class="str_item_name">雑談</div>
 						</div>
-						<div id="str_tag_op_maro" class="str_tag_button">
-							<div id="str_tag_checkbox_maro" class="str_tag_checkbox selected str_tag_and"></div>
+						<div id="str_op_tag_maro" class="str_tag_button">
+							<div id="str_checkbox_tag_maro" class="str_gp_tag str_tag_checkbox selected str_tag_and"></div>
 							<div class="str_item_name">マロ</div>
 						</div>
-						<div id="str_tag_op_topic" class="str_tag_button">
-							<div id="str_tag_checkbox_topic" class="str_tag_checkbox selected str_tag_and"></div>
+						<div id="str_op_tag_topic" class="str_tag_button">
+							<div id="str_checkbox_tag_topic" class="str_gp_tag str_tag_checkbox selected str_tag_and"></div>
 							<div class="str_item_name">企画</div>
 						</div>
-						<div id="str_tag_op_asmr" class="str_tag_button">
-							<div id="str_tag_checkbox_asmr" class="str_tag_checkbox selected str_tag_and"></div>
+						<div id="str_op_tag_asmr" class="str_tag_button">
+							<div id="str_checkbox_tag_asmr" class="str_gp_tag str_tag_checkbox selected str_tag_and"></div>
 							<div class="str_item_name">ASMR</div>
 						</div>
+						<div id="str_op_tag_memo" class="str_tag_button">
+							<div id="str_checkbox_tag_memo" class="str_gp_tag str_tag_checkbox selected str_tag_and"></div>
+							<div class="str_item_name">記念</div>
+						</div>
+						<div id="str_op_tag_other" class="str_tag_button">
+							<div id="str_checkbox_tag_other" class="str_gp_tag str_tag_checkbox selected str_tag_and"></div>
+							<div class="str_item_name">その他</div>
+						</div>
 					</div>
-					<div class="str_search_subtitle">配信属性</div>
+					<div id="str_search_game">
+						<div class="str_search_subtitle">ゲーム種類</div>
+						<div class="str_search_options">
+							<div id="str_op_game_all" class="str_tag_button">
+								<div id="str_checkbox_game_all" class="str_gp_game str_tag_checkbox selected str_tag_and"></div>
+								<div class="str_item_name">全部</div>
+							</div>
+							<div id="str_op_game_join" class="str_tag_button">
+								<div id="str_checkbox_game_join" class="str_gp_game str_tag_checkbox selected str_tag_and"></div>
+								<div class="str_item_name">参加型</div>
+							</div>
+							<div id="str_op_game_horror" class="str_tag_button">
+								<div id="str_checkbox_game_horror" class="str_gp_game str_tag_checkbox selected str_tag_and"></div>
+								<div class="str_item_name">ホラゲー</div>
+							</div>
+							<div id="str_op_game_mc" class="str_tag_button">
+								<div id="str_checkbox_game_mc" class="str_gp_game str_tag_checkbox selected str_tag_and"></div>
+								<div class="str_item_name">マイクラ</div>
+							</div>
+							<div id="str_op_game_pen" class="str_tag_button">
+								<div id="str_checkbox_game_pen" class="str_gp_game str_tag_checkbox selected str_tag_and"></div>
+								<div class="str_item_name">罰ゲーム</div>
+							</div>
+							<div id="str_op_game_other" class="str_tag_button">
+								<div id="str_checkbox_game_other" class="str_gp_game str_tag_checkbox selected str_tag_and"></div>
+								<div class="str_item_name">その他</div>
+							</div>
+						</div>
+					</div>
+					<div class="str_search_subtitle">選択方法</div>
 					<div class="str_search_options">
-						<div id="str_attr_op_selfcolab" class="str_attr_button">
-							<div id="str_attr_checkbox_selfcolab" class="str_checkbox selected "></div>
-							<div class="str_item_name">自枠コラボ</div>
+						<div id="str_method_op_and" class="str_method_button">
+							<div id="str_method_checkbox_and" class="radio selected"></div>
+							<div class="str_item_name">AND</div>
 						</div>
-						<div id="str_attr_op_othercolab" class="str_attr_button">
-							<div id="str_attr_checkbox_othercolab" class="str_checkbox selected "></div>
-							<div class="str_item_name">他枠コラボ</div>
-						</div>
-						<div id="str_attr_op_member" class="str_attr_button">
-							<div id="str_attr_checkbox_member" class="str_checkbox selected "></div>
-							<div class="str_item_name">メン限</div>
-						</div>
-						<div id="str_attr_op_video" class="str_attr_button">
-							<div id="str_attr_checkbox_video" class="str_checkbox selected "></div>
-							<div class="str_item_name">動画</div>
+						<div id="str_method_op_or" class="str_method_button">
+							<div id="str_method_checkbox_or" class="radio"></div>
+							<div class="str_item_name">OR</div>
 						</div>
 					</div>
 				</div>
 			</div>
+			<div class="str_search_block">
+				<div id="str_label_attr" class="str_search_title">
+					<div class="str_tag_name">配信属性/並び順</div>
+					<div id="str_close_attr" class="str_close closed"></div>
+				</div>
+				<div id="str_content_attr" class="str_search_content hidden">
+					<div class="str_search_subtitle">配信属性</div>
+					<div class="str_search_options">
+						<div id="str_attr_op_member" class="str_attr_button">
+							<div id="str_attr_checkbox_member" class="str_checkbox selected"></div>
+							<div class="str_item_name">メン限</div>
+						</div>
+						<div id="str_attr_op_selfcolab" class="str_attr_button">
+							<div id="str_attr_checkbox_selfcolab" class="str_checkbox selected"></div>
+							<div class="str_item_name">自枠コラボ</div>
+						</div>
+						<div id="str_attr_op_othercolab" class="str_attr_button">
+							<div id="str_attr_checkbox_othercolab" class="str_checkbox selected"></div>
+							<div class="str_item_name">他枠コラボ</div>
+						</div>
+					</div>
+					<div class="str_search_subtitle">並び順</div>
+					<div class="str_search_options">
+						<div id="str_op_sort_date" class="str_sort_button">
+							<div id="str_checkbox_sort_date" class="radio selected str_sort1"></div>
+							<div class="str_item_name">配信日時</div>
+						</div>
+						<div id="str_op_sort_length" class="str_sort_button">
+							<div id="str_checkbox_sort_length" class="radio str_sort1"></div>
+							<div class="str_item_name">長さ</div>
+						</div>
+					</div>
+					<div class="str_search_subtitle"></div>
+					<div class="str_search_options">
+						<div id="str_op_sort_asd" class="str_sort_button">
+							<div id="str_checkbox_sort_asd" class="radio selected str_sort2"></div>
+							<div id="str_sort_op1" class="str_item_name">新しい順</div>
+						</div>
+						<div id="str_op_sort_des" class="str_sort_button">
+							<div id="str_checkbox_sort_des" class="radio str_sort2"></div>
+							<div id="str_sort_op2" class="str_item_name">古い順</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="str_display"></div>
 		</div>
 		<div id="menu_container" class="hidden">
 			<div id="menu_panel" class="defog">
@@ -975,5 +1079,5 @@
 			</div>
 		</div>
 		<div id="search_auto" class="hidden"></div>
-    </body>
+	</body>
 </html>
