@@ -239,14 +239,16 @@ function str_search() {
 	
 	// input part
 	var input_value = $("#str_input").val();
-	if ((input_value !== "") && (input_value !== str_input_mem)) {
+	if (input_value !== str_input_mem) {
 		str_selected = [];
 		str_input_mem = input_value;
 		str_input_hits = 0;
-		for (var i = 0; i < stream.length; ++i) {
-			if (stream[i][str_idx.title].includes(input_value)) {
-				str_selected.push(i);
-				str_input_hits++;
+		if (input_value !== "") {
+			for (var i = 0; i < stream.length; ++i) {
+				if (stream[i][str_idx.title].includes(input_value)) {
+					str_selected.push(i);
+					str_input_hits++;
+				}
 			}
 		}
 	} else {
