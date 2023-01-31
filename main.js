@@ -40,7 +40,7 @@ var video_idx = {
 	date : 1
 };
 
-var version = "1.1.10";
+var version = "1.2.0";
 
 /* control / memories */
 
@@ -276,6 +276,7 @@ $(function() {
 						$("#nav_dummy").removeClass("hidden");
 						
 						$(window).scrollTop(0);
+						str_search();
 						break;
 				}
 				

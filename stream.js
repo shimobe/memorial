@@ -36,6 +36,73 @@ var str_idx = {
 	length : 5
 }
 
+var nrpr_mem = [
+	"犬山たまき",
+	"白雪みしろ",
+	"愛宮みるく",
+	"熊谷タクマ",
+	"姫咲ゆずる",
+	"鬼灯わらべ",
+	"夢乃リリス",
+	"逢魔きらら",
+	"胡桃澤もも",
+	"看谷にぃあ"
+];
+
+var processed_title = [];
+/* element : array of 3
+ * 
+ * [0] : array of non-member tag in 【】, last element is ignored if >= 2 elements
+ * [1] : actual title
+ * [2] : member in video, 0 if not collab
+ *
+ */
+$(document).ready(function() {
+	for (var i in stream) {
+		processed_title[i] = [, , 0];
+		var org_title = stream[i][str_idx.title];
+		
+		// tag
+		processed_title[i][0] = org_title.match(/【([^】]*)】/g);
+		if (processed_title[i][0] !== null) {
+			for (var j = 0; j < processed_title[i][0].length; ++j) {
+				if (!/のりプロ所属/g.test(processed_title[i][0][j])) {
+					processed_title[i][0][j] = processed_title[i][0][j].replace(/[#【】]/g, "");
+				}
+			}
+		}
+		
+		// title
+		processed_title[i][1] = org_title.replace(/【.*?】/g, "");
+		
+		//member
+		// check if the stream is tagged as collab
+		if (stream[i][str_idx.attr] & (3 << 14)) {
+			for (var j = 0; j < nrpr_mem.length; ++j) {
+				if (org_title.includes(nrpr_mem[j])) {
+					processed_title[i][2] |= 1 << j;
+				}
+			}
+			
+			// just doing things manually
+			if (stream[i][str_idx.id] === "2F_G6gZa2gs") {
+				processed_title[i][2] = 0b1111100010;
+			}
+			if (stream[i][str_idx.id] === "tcaNLhN9Goo") {
+				processed_title[i][2] += 1;
+			}
+			if (stream[i][str_idx.id] === "i6Llc4UDRD8" || stream[i][str_idx.id] === "Qp6y6lN10N4") {
+				processed_title[i][2] = 0b1111100000;
+			}
+			if (stream[i][str_idx.id] === "qh6TiQSMLaU") {
+				processed_title[i][2] = 0b0110000000;
+			}
+		}
+		
+
+	}
+});
+
 $(function() {
 	// input - submit
 	$(document).on("blur", "#str_input", function() {
@@ -153,6 +220,14 @@ $(function() {
 		}
 		str_display();
 	});
+	
+	// click to video
+	$(document).on("click", ".str_display_item", function() {
+		var e = parseInt($(this).attr("id"));
+		if (stream[e][str_idx.state] === 0) {
+			window.open("https://youtu.be/" + stream[e][str_idx.id], "_blank");
+		}
+	})
 });
 
 var str_selected = [];
@@ -169,7 +244,7 @@ function str_search() {
 		str_input_mem = input_value;
 		str_input_hits = 0;
 		for (var i = 0; i < stream.length; ++i) {
-			if (stream[i][str_idx.title].replace(/[(逢魔きらら)|(のりプロ所属)]|【】/gi, "").includes(input_value)) {
+			if (stream[i][str_idx.title].includes(input_value)) {
 				str_selected.push(i);
 				str_input_hits++;
 			}
@@ -193,10 +268,15 @@ function str_search() {
 	for (var i in str_attr) {
 		str_attr_mask |= str_attr[i][0] << str_attr[i][1];
 	}
-	console.log((str_attr_mask >>> 0).toString(2), (~str_attr_mask >>> 0).toString(2));
 	for (var i = 0; i < stream.length; ++i) {
 		if (str_selected.includes(i)) {
 			continue;
+		}
+		// if that stream ONLY consistof collab tag
+		if ((stream[i][str_idx.attr] & (str_attr.selfcolab[0] << str_attr.selfcolab[1])) ||
+			(stream[i][str_idx.attr] & (str_attr.othercolab[0] << str_attr.othercolab[1]))) {
+				str_selected.push(i);
+				continue;
 		}
 		var local_mask = stream[i][str_idx.attr] & ((1 << 13) - 1);
 		if (local_mask === 0 && str_using_and) {
@@ -252,14 +332,72 @@ function str_display() {
 	
 	for (var i in str_sorted) {
 		// outer block
-		new_html += "<div class=\"str_display_item\">";
-		// date, member line
-		new_html += ("<div class=\"str_item_data\"><div class=\"str_date\">" + stream[str_sorted[i]][str_idx.date] + "</div><div class=\"str_member\">");
-		// add members if collab
-		if (stream[str_sorted[i]][str_idx.attr] & 0x1) {
-			
+		new_html += "<div class=\"str_display_item" + (stream[str_sorted[i]][str_idx.state] === 0 ? "" : " private") + "\" id=\"" + str_sorted[i] + "\">";
+		// 1st line - date
+		new_html += ("<div class=\"str_item_1stline\"><div class=\"str_item_date\">" + stream[str_sorted[i]][str_idx.date] + "</div>");
+		// 1st line - length
+		new_html += ("<div class=\"str_item_length\">" + to_hmmss(stream[str_sorted[i]][str_idx.length]) + "</div></div>");
+		// 2nd line - container
+		new_html += "<div class=\"str_item_2ndline\">";
+		// 2nd line - tag
+		if (processed_title[str_sorted[i]][0] !== null) {
+			new_html += "<div class=\"str_item_tags\">";
+			for (var j = 0; j < processed_title[str_sorted[i]][0].length; ++j) {
+				if (processed_title[str_sorted[i]][0][j] === "逢魔きらら") {
+					continue;
+				}
+				if (processed_title[str_sorted[i]][0][j].includes("のりプロ所属")) {
+					break;
+				}
+				var f = processed_title[str_sorted[i]][0][j].replace(/(逢魔きらら\/|\/逢魔きらら|逢魔きらら／|／逢魔きらら|\/のりプロ)/, "");
+				// do not need momo's name after momokira
+				if (f.includes("ももきら")) {
+					f = "ももきら";
+				}
+				new_html += ("<div class=\"str_item_subtag\">" + f + "</div>");
+			}
+			new_html += "</div>";
 		}
+		// 2nd line - title
+		new_html += ("<div class=\"str_item_title\">" + processed_title[str_sorted[i]][1] + "</div></div>");
+		// add members if collab
+		if (stream[str_sorted[i]][str_idx.attr] & (3 << 14)) {
+			// 3rd line - container
+			new_html += "<div class=\"atr_item_3rdline\">";
+			for (var j = 0; j < nrpr_mem.length; ++j) {
+				// if member exist, add icon
+				if (processed_title[str_sorted[i]][2] & (1 << j)) {
+					new_html += "<div class=\"str_icon_mem_" + j + "\"></div>";
+				}
+			}
+			new_html += "</div>"
+		}
+		new_html += "</div>";
 	}
 	
 	$("#str_display").html(new_html);
+}
+
+function to_hmmss(input) {
+	// input int of sec
+	return ((input / 3600) >> 0) + ":" + fill_digit(((input % 3600) / 60) >> 0, 2) + ":" + fill_digit(input % 60, 2);
+}
+
+function str_process_title(input) {
+	var org_title = stream[input][str_idx.title];
+	// extract
+	console.log(org_title);
+	var meta = org_title.match(/【([^】]*)】/g);
+	var title = org_title.replace(/【.*?】/g, "");
+	if (meta !== null) {
+		for (var i = 0; i <  meta.length; ++i) {
+			if (/\//g.test(meta[i])) {
+				meta.splice(i--, 1);
+			} else {
+				meta[i] = meta[i].replace(/[#【】]/g, "");
+			}
+		}
+	}
+
+	console.log(meta, title);
 }
