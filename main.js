@@ -40,7 +40,7 @@ var video_idx = {
 	date : 1
 };
 
-var version = "1.2.1";
+var version = "1.2.2";
 
 /* control / memories */
 
@@ -313,7 +313,7 @@ $(function() {
 
 	// information -fog> return
 	$(document).on("click", "#information", function(e) {
-		if (!($(e.target).parents(".defog").length ||  $(e.target).hasClass("defog"))) {
+		if ($(e.target).attr("id") === "information") {
 			$("#information").addClass("hidden");
 			$("#popup_container").addClass("hidden");
 			$(document.body).removeClass("no_scroll");

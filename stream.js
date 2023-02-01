@@ -235,8 +235,6 @@ var str_input_hits = 0;
 var str_input_mem = "";
 
 function str_search() {
-	// reset
-	
 	// input part
 	var input_value = $("#str_input").val();
 	if (input_value !== str_input_mem) {
