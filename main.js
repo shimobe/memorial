@@ -472,6 +472,21 @@ function update_visual(cur_scroll = 0) {
 	}
 }
 
+function poem_to_html(id) {
+	var e = poem_data[id];
+	var output = "<div>";
+	output += e.replaceAll(")(", "</rt>")
+			   .replaceAll( "(", "<ruby>")
+			   .replaceAll( ",", "<rt>")
+			   .replaceAll( ")", "</rt></ruby>")
+			   .replaceAll("\n", "<br />")
+			   .replace(   "\a", "</div><span>-")
+			   .replace(  "匿名", "詠み人知らず")
+			   .replaceAll( "[", "(")
+			   .replaceAll( "]", ")");
+	return (output + "</span>");
+}
+
 // functional functions
 
 // display date in yyyy-MM-dd format
