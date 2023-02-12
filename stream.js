@@ -237,56 +237,59 @@ var str_input_mem = "";
 function str_search() {
 	// input part
 	var input_value = $("#str_input").val();
-	if (input_value !== str_input_mem) {
-		str_selected = [];
-		str_input_mem = input_value;
-		str_input_hits = 0;
-		if (input_value !== "") {
-			for (var i = 0; i < stream.length; ++i) {
-				if (stream[i][str_idx.title].includes(input_value)) {
-					str_selected.push(i);
-					str_input_hits++;
+	// check if input is empty
+	if (input_value !== "") {
+		// search thru input only
+		if (input_value !== str_input_mem) {
+			str_selected = [];
+			str_input_mem = input_value;
+			str_input_hits = 0;
+			if (input_value !== "") {
+				for (var i = 0; i < stream.length; ++i) {
+					if (stream[i][str_idx.title].includes(input_value)) {
+						str_selected.push(i);
+						str_input_hits++;
+					}
 				}
 			}
 		}
 	} else {
-		// keep search part
-		str_selected = str_selected.slice(0, str_input_hits);
-	}
-	
-	// generate mask
-	var str_mask = 0,
-		str_attr_mask = (1 << 13) - 1;
-	for (var i in str_tag) {
-		str_mask |= str_tag[i][0] << str_tag[i][1];
-	}
-	if (str_tag["game"][0]) {
-		for (var i in str_game) {
-			str_mask |= str_game[i][0] << str_game[i][1];
+		// else search thru attr only
+		// reset selection
+		str_selected = [];
+		// generate mask
+		var str_mask = 0,
+			str_attr_mask = (1 << 13) - 1;
+		for (var i in str_tag) {
+			str_mask |= to_mask(str_tag[i]);
 		}
-	}
-	for (var i in str_attr) {
-		str_attr_mask |= str_attr[i][0] << str_attr[i][1];
-	}
-	for (var i = 0; i < stream.length; ++i) {
-		if (str_selected.includes(i)) {
-			continue;
+		if (str_tag["game"][0]) {
+			for (var i in str_game) {
+				str_mask |= to_mask(str_game[i]);
+			}
 		}
-		// if that stream ONLY consistof collab tag
-		if ((stream[i][str_idx.attr] & (str_attr.selfcolab[0] << str_attr.selfcolab[1])) ||
-			(stream[i][str_idx.attr] & (str_attr.othercolab[0] << str_attr.othercolab[1]))) {
-				str_selected.push(i);
+		for (var i in str_attr) {
+			str_attr_mask |= to_mask(str_attr[i]);
+		}
+		for (var i = 0; i < stream.length; ++i) {
+			// if that stream ONLY consist of member only / collab tag
+			if ((stream[i][str_idx.attr] & to_mask(str_attr.member)) ||
+				(stream[i][str_idx.attr] & to_mask(str_attr.selfcolab)) ||
+				(stream[i][str_idx.attr] & to_mask(str_attr.othercolab))) {
+					str_selected.push(i);
+					continue;
+			}
+			var local_mask = stream[i][str_idx.attr] & ((1 << 13) - 1);
+			// if nothing selected and in and mode
+			if (local_mask === 0 && str_using_and) {
 				continue;
-		}
-		var local_mask = stream[i][str_idx.attr] & ((1 << 13) - 1);
-		if (local_mask === 0 && str_using_and) {
-			continue;
-		}
-		// if using and , remove anything that contains anything not selected, else add everything include selected
-		if (str_using_and ? !(local_mask & (~str_mask >>> 0)) : stream[i][str_idx.attr] & str_mask) {
-			// check archive attr
-			if (!(stream[i][str_idx.attr] & ~str_attr_mask)) {
-				str_selected.push(i);
+			}
+			// if using and , remove anything that contains anything not selected, else add everything include selected
+			if (str_using_and ? !(local_mask & (~str_mask >>> 0)) : stream[i][str_idx.attr] & str_mask) {
+				// check archive attr
+				if (!(stream[i][str_idx.attr] & ~str_attr_mask)) {
+					str_selected.push(i);
+				}
 			}
 		}
 	}
@@ -294,29 +297,8 @@ function str_search() {
 }
 
 function str_display() {
-	// sort
-	var str_sorted = [];
-	if (str_input_hits <= 1) {
-		// does not have to sort the input part
-		str_sorted = str_selected.slice(0, str_input_hits);
-	} else {
-		// have to sort the input part
-		var str_input_part = str_selected.slice(0, str_input_hits);
-		str_input_part.sort(function(a, b) {
-			if (str_sort_date) {
-				// sort date
-				return (str_sort_asd ? -1 : 1) * (a - b);
-			} else {
-				// sort length
-				return (str_sort_asd ? -1 : 1) * (stream[a][str_idx.length] - stream[b][str_idx.length]);
-			}
-		});
-		str_sorted = str_input_part;
-	}
-	
-	// sort the rest of the record
-	var str_attr_part = str_selected.slice(str_input_hits);
-	str_attr_part.sort(function(a, b) {
+	// local for sorted array
+	var str_sorted = str_selected.sort(function(a, b) {
 		if (str_sort_date) {
 			// sort date
 			return (str_sort_asd ? -1 : 1) * (a - b);
@@ -325,7 +307,6 @@ function str_display() {
 			return (str_sort_asd ? -1 : 1) * (stream[a][str_idx.length] - stream[b][str_idx.length]);
 		}
 	});
-	str_sorted = str_sorted.concat(str_attr_part);
 	
 	// display
 	var new_html = "";
@@ -400,4 +381,8 @@ function str_process_title(input) {
 	}
 
 	console.log(meta, title);
+}
+
+function to_mask(input) {
+	return (input[0] << input[1]);
 }
