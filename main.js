@@ -40,7 +40,7 @@ var video_idx = {
 	date : 1
 };
 
-var version = "1.2.2";
+var version = "1.2.3";
 
 /* control / memories */
 
@@ -53,6 +53,9 @@ var current_page = "home";
 // home total height
 var home_height = 0;
 var home_change_visual = [{start : 0, end : 0}, {start : 0, end : 0}];
+
+// save state of display ruby, can do this with attr reading but nah
+var ruby_master = true;
 
 /* setting section */
 // max display song count
@@ -90,50 +93,51 @@ $(document).ready(function() {
 	}
 	init();
 	update_visual();
-	
-	$("#home_note_stream").html("(" + stream[stream.length - 1][str_idx.date].slice(0, 10) + "迄)");
-	$("#home_note_song").html("(" + stream[stream.length - 1][str_idx.date].slice(0, 10) + "迄, メン限/非公開/他枠含む)")
-	
-	var c_stream  = 0,
-		c_member  = 0,
-		c_singing = 0,
-		c_asmr    = -1,	// counter 
-		c_slcolab = 0;
-	for (var i in stream) {
-		c_stream  += (stream[i][str_idx.attr] & (1 << str_attr.othercolab[1])) ? 0 : 1;
-		c_member  += (stream[i][str_idx.attr] & (1 << str_attr.member[1])) ? 1 : 0;
-		c_singing += ((stream[i][str_idx.attr] & (1 << str_tag.singing[1])) && !(stream[i][str_idx.attr] & (1 << str_attr.othercolab[1]))) ? 1 : 0;
-		c_asmr    += ((stream[i][str_idx.attr] & (1 << str_tag.asmr[1])) && !(stream[i][str_idx.attr] & (1 << str_attr.othercolab[1]))) ? 1 : 0;
-		c_slcolab += (stream[i][str_idx.attr] & (1 << str_attr.selfcolab[1])) ? 1 : 0;
+	{	// stream, song data
+		$("#home_note_stream").html("(" + stream[stream.length - 1][str_idx.date].slice(0, 10) + "迄)");
+		$("#home_note_song").html("(" + stream[stream.length - 1][str_idx.date].slice(0, 10) + "迄, メン限/非公開/他枠含む)")
+		
+		var c_stream  = 0,
+			c_member  = 0,
+			c_singing = 0,
+			c_asmr    = -1,	// counter 
+			c_slcolab = 0;
+		for (var i in stream) {
+			c_stream  += (stream[i][str_idx.attr] & (1 << str_attr.othercolab[1])) ? 0 : 1;
+			c_member  += (stream[i][str_idx.attr] & (1 << str_attr.member[1])) ? 1 : 0;
+			c_singing += ((stream[i][str_idx.attr] & (1 << str_tag.singing[1])) && !(stream[i][str_idx.attr] & (1 << str_attr.othercolab[1]))) ? 1 : 0;
+			c_asmr    += ((stream[i][str_idx.attr] & (1 << str_tag.asmr[1])) && !(stream[i][str_idx.attr] & (1 << str_attr.othercolab[1]))) ? 1 : 0;
+			c_slcolab += (stream[i][str_idx.attr] & (1 << str_attr.selfcolab[1])) ? 1 : 0;
+		}
+		
+		$("#home_count_stream").html(c_stream + "回");
+		$("#home_count_member").html(c_member + "回");
+		$("#home_count_singing").html(c_singing + "回");
+		$("#home_count_asmr").html(c_asmr + "回");
+		$("#home_count_selfcollab").html(c_slcolab + "回");
+		
+		// get values from data
+		$("#home_count_song").html(entry.length + "回");
+		var rep_count = 0;
+		for (var i in entry_proc) {
+			rep_count += entry_proc[i].length === 0 ? 0 : 1;
+		}
+		$("#home_count_rep").html(rep_count + "曲");
+		// set ranking
+		var e = [...Array(song.length).keys()];
+		e.sort(function(a, b) {
+			return entry_proc[b].length - entry_proc[a].length;
+		});
+		var new_html = "";
+		var loaded_records = 0,
+			lastest_count = -1;
+		do {
+			new_html += "<div class=\"row-" + (loaded_records + 1) + " col-1\">" + song[e[loaded_records]][song_idx.name] + "</div>";
+			new_html += "<div class=\"row-" + (loaded_records + 1) + " col-2\">" + entry_proc[e[loaded_records]].length + "回</div>";
+			loaded_records++;
+		} while (!(loaded_records >= 10 && lastest_count != entry_proc[e[loaded_records + 1]].length));
+		$(".home_gridsong").html(new_html);
 	}
-	
-	$("#home_count_stream").html(c_stream + "回");
-	$("#home_count_member").html(c_member + "回");
-	$("#home_count_singing").html(c_singing + "回");
-	$("#home_count_asmr").html(c_asmr + "回");
-	$("#home_count_selfcollab").html(c_slcolab + "回");
-	
-	// get values from data
-	$("#home_count_song").html(entry.length + "回");
-	var rep_count = 0;
-	for (var i in entry_proc) {
-		rep_count += entry_proc[i].length === 0 ? 0 : 1;
-	}
-	$("#home_count_rep").html(rep_count + "曲");
-	// set ranking
-	var e = [...Array(song.length).keys()];
-	e.sort(function(a, b) {
-		return entry_proc[b].length - entry_proc[a].length;
-	});
-	var new_html = "";
-	var loaded_records = 0,
-		lastest_count = -1;
-	do {
-		new_html += "<div class=\"row-" + (loaded_records + 1) + " col-1\">" + song[e[loaded_records]][song_idx.name] + "</div>";
-		new_html += "<div class=\"row-" + (loaded_records + 1) + " col-2\">" + entry_proc[e[loaded_records]].length + "回</div>";
-		loaded_records++;
-	} while (!(loaded_records >= 10 && lastest_count != entry_proc[e[loaded_records + 1]].length));
-	$(".home_gridsong").html(new_html);
 });
 
 $(function() {
@@ -209,7 +213,21 @@ $(function() {
 				return;
 			}
 			update_visual($(this).scrollTop());
-
+		});
+	}
+	
+	{ // poem
+		// poem - toggle block ruby visibility
+		$(document).on("click", ".poem_block", function(e) {
+			// check if click on poem_block
+			$("#" + $($(e.target).closest(".poem_block")).attr("id") + " rt").toggleClass("no_ruby");
+		});
+		
+		// poem - toggle all ruby visibility
+		$(document).on("click", "#poem_contorl_button", function() {
+			$(".poem_button").toggleClass("selected");
+			$("rt").toggleClass("no_ruby", ruby_master);
+			ruby_master = !ruby_master;
 		});
 	}
 	
@@ -274,9 +292,20 @@ $(function() {
 						$("#nav_search_random").addClass("hidden");
 						$("#nav_share_rep").addClass("hidden");
 						$("#nav_dummy").removeClass("hidden");
-						
 						$(window).scrollTop(0);
 						str_search();
+						break;
+					case "poem" : 
+						// show section
+						$("#poem_section").removeClass("hidden");
+						$("#nav_title").html("百人一首");
+						$("#nav_search_random").addClass("hidden");
+						$("#nav_share_rep").addClass("hidden");
+						$("#nav_dummy").removeClass("hidden");
+						$(window).scrollTop(0);
+						if ($("#poem_display").html() === "") {
+							load_poem();
+						}
 						break;
 				}
 				
@@ -472,19 +501,41 @@ function update_visual(cur_scroll = 0) {
 	}
 }
 
+function load_poem() {
+	// load display
+	var new_html = "";
+	for (var i = 0; i < poem_data.length; ++i) {
+		if (i % 10 === 0) {
+			// add anchor target
+			new_html += ("<div id=\"poem_target_" + (i + 1) + "\" class=\"poem_target\"></div>");
+		}
+		new_html += ("<div id=\"poem_" + (i + 1) + "\" class=\"poem_block\"><div class=\"poem_no\">" + fill_digit(i + 1, 3) + "</div>");
+		new_html += poem_to_html(i);
+		new_html += "</div>";
+	}
+	$("#poem_display").html(new_html);
+	// load sidebar
+	new_html = "";
+	for (var i = 0; i < 12; ++i) {
+		new_html += ("<div class=\"poem_side_button\"><a href=\"#poem_target_" + (i * 10 + 1) + "\">" + fill_digit(i * 10 + 1, 3) + "</a></div>");
+	}
+	$("#poem_sidebar_inner").html(new_html);
+}
+
 function poem_to_html(id) {
 	var e = poem_data[id];
-	var output = "<div>";
+	var output = "<div class=\"poem_poem\">";
 	output += e.replaceAll(")(", "</rt>")
 			   .replaceAll( "(", "<ruby>")
+			   .replaceAll(",!", "<rt class=\"force_ruby\">")
 			   .replaceAll( ",", "<rt>")
 			   .replaceAll( ")", "</rt></ruby>")
 			   .replaceAll("\n", "<br />")
-			   .replace(   "\a", "</div><span>-")
+			   .replace(   "$a", "</div><div class=\"poem_author\">")
 			   .replace(  "匿名", "詠み人知らず")
 			   .replaceAll( "[", "(")
 			   .replaceAll( "]", ")");
-	return (output + "</span>");
+	return (output + "</div>");
 }
 
 // functional functions

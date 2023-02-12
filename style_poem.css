@@ -1,0 +1,131 @@
+#poem_section {
+	display : grid;
+	margin-top : 10vw;
+	grid-template-columns: 92% 8%;
+}
+
+#poem_control {
+	grid-column : 1 / span 2;
+	grid-row : 1;
+	padding : 2vw;
+	margin : 2vw;
+	background-color : LightGreen;
+	border-radius : 1.2vw;
+	display : flex;
+}
+
+#poem_control_title {
+	margin : 0 32vw 0 4vw;
+	font-size : 6vw;
+}
+
+#poem_contorl_button {
+	display : flex;
+	margin : 0 2vw;
+	background-color : Green;
+	border-radius : 1.2vw;
+	font-size : 4vw;
+}
+
+.poem_button {
+	margin : 1vw;
+	padding : 1vw;
+	border-radius : 0.8vw;
+}
+
+.poem_button.selected {
+	background-color : White;
+	color : Green;
+	border-radius : 0.8vw;
+	font-weight : bold;
+}
+
+.poem_button:not(.selected) {
+	background-color : Green;
+	color : White;
+}
+
+#poem_display {
+	grid-column : 1;
+	grid-row : 2;
+}
+
+.poem_block {
+	background-color : #CFBFDF;
+	margin : 2vw 3vw 2vw 1vw;
+	width : 84vw;
+	padding : 2vw;
+	border-radius : 1.6vw;
+	font-color : #1F073F;
+	display : grid;
+	grid-template-columns: 72% 28%;
+}
+
+.poem_poem {
+	grid-row : 1 / span 2;
+	grid-column : 1 / span 2;
+	font-size : 6vw;
+/*	writing-mode: vertical-rl;
+	text-orientation: upright;
+*/
+}
+
+.poem_no {
+	grid-column : 2;
+	grid-row : 1;
+	font-size : 8vw;
+}
+
+.poem_author {
+	grid-column : 2;
+	grid-row : 2;
+	font-size : 3vw;
+}
+
+rt {
+	font-size : 2vw;
+}
+
+.no_ruby:not(.force_ruby) {
+	visibility : hidden;
+}
+
+#poem_sidebar {
+	grid-column : 2;
+	grid-row : 2;
+	display : grid;
+}
+
+#poem_sidebar_inner {
+	position : fixed;
+	height : 75vh;
+	width : 7vw;
+	border-radius : 0.6vw;
+	grid-column : 1;
+	grid-row : 1;
+}
+
+#poem_sidebar_background {
+	background-color : LightSteelBlue;
+	position : fixed;
+	height : 72vh;
+	width : 4vw;
+	margin : 1vw 1.5vw;
+	grid-column : 1;
+	grid-row : 1;
+}
+
+.poem_side_button {
+	background-color : DarkSlateBlue;
+	color : LightCyan;
+	font-size : 3.4vw;
+	padding : 1vw 0vw;
+	margin-bottom : 4.25vw;
+	border-radius : 0.6vw;
+	text-align : center;
+}
+
+.poem_target {
+	position: absolute;
+	transform: translateY(-12vw);
+}
