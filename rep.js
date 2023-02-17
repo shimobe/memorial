@@ -468,24 +468,35 @@ function rep_display() {
 				return (rep_sort_asd ? 1 : -1) * (entry_proc[b].length - entry_proc[a].length);
 			});
 			break;
-		case "date" :
+		case "date" : {
 			// sort with last sang date
+			var date_lookup = [];
+			for (var i in song) {
+				var dummy = get_last_sang(i, selected_member);
+				date_lookup[i] = dummy ? dummy.getTime() : 0;
+			}
 			rep_hits.sort((a, b) => {
-				if (get_last_sang(b, selected_member).getTime() === get_last_sang(a, selected_member).getTime()) {
+				if (date_lookup[a] === date_lookup[b]) {
 					return 0;
 				}
-				return (rep_sort_asd ? 1 : -1) * (get_last_sang(b, selected_member).getTime() - get_last_sang(a, selected_member).getTime());
+				return (rep_sort_asd ? 1 : -1) * (date_lookup[b] - date_lookup[a]);
 			});
 			break;
-		case "release" :
+		}
+		case "release" : {
 			// release date of song
+			var date_lookup = [];
+			for (var i = 1; i < song.length; ++i) {
+				date_lookup[i] = to8601(song[i][song_idx.release]).getTime();
+			}
 			rep_hits.sort((a, b) => {
-				if (song[b][song_idx.release] === song[a][song_idx.release]) {
+				if (date_lookup[a] === date_lookup[b]) {
 					return 0;
 				}
-				return (rep_sort_asd ? 1 : -1) * (to8601(song[b][song_idx.release]).getTime() - to8601(song[a][song_idx.release]).getTime());
+				return (rep_sort_asd ? 1 : -1) * (date_lookup[b] - date_lookup[a]);
 			});
 			break;
+		}
 		default : 
 			// anything else is error
 			console.log("rep_sort of type \"" + rep_sort + "\" not found");
@@ -503,7 +514,8 @@ function rep_display() {
 		// info line1
 		new_html += "<div class=\"rep_song_info grid_block-4\">";
 		// last sang
-		new_html += ("<div>" + get_date_different(get_last_sang(rep_hits[i], selected_member)) + "日前</div>");
+		var delta_last = get_date_different(get_last_sang(rep_hits[i], selected_member));
+		new_html += ("<div>" + (delta_last === 0 ? "今日" : (delta_last + "日前")) + "</div>");
 		// count
 		new_html += ("<div>" + sang_count[0] + "回" + (sang_count[1] > 0 ? (sang_count[0] === sang_count[1] ? " (メン限のみ)" : " (" + sang_count[1] + "回メン限)") : "") + "</div>");
 		// type

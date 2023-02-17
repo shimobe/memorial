@@ -75,7 +75,7 @@ $(document).ready(function() {
 		// title
 		processed_title[i][1] = org_title.replace(/【.*?】/g, "");
 		
-		//member
+		// member
 		// check if the stream is tagged as collab
 		if (stream[i][str_idx.attr] & (3 << 14)) {
 			for (var j = 0; j < nrpr_mem.length; ++j) {
