@@ -41,7 +41,7 @@ $(function() {
 		
 		// search - input::enter -> blur
 		$(document).on("keydown", function(e) {
-			if (e.keyCode === 13) {
+			if (e.keyCode === 13 && current_page === "search") {
 				$("#input").blur();
 			}
 		});
@@ -251,15 +251,17 @@ function search() {
 	// replace wchar w/ char
 	e = e.normalize("NFKC");
 	var series_name = "";
-	for (var i in series_lookup) {
-		for (var j in series_lookup[i]) {
-			if (series_lookup[i].includes(e)) {
-				series_name = i;
+	if (searching_song_name) {
+		for (var i in series_lookup) {
+			for (var j in series_lookup[i]) {
+				if (series_lookup[i].includes(e)) {
+					series_name = i;
+					break;
+				}
+			}
+			if (series_name !== "") {
 				break;
 			}
-		}
-		if (series_name !== "") {
-			break;
 		}
 	}
 	// search for series in attr

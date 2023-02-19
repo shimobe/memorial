@@ -111,7 +111,7 @@ $(function() {
 	
 	// input::enter -> blur
 	$(document).on("keydown", function(e) {
-		if (e.keyCode === 13) {
+		if (e.keyCode === 13 && current_page === "stream") {
 			$("#str_input").blur();
 		}
 	});

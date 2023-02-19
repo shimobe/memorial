@@ -1,4 +1,7 @@
 // repertoire section
+
+var vote_tag = "きらLIVE番外編";
+
 // attr lookup
 var attr_idx = [
 	"others",
@@ -18,18 +21,7 @@ var attr_idx = [
 ];
 // type of all songs
 var rep_list = [];
-// singer selection
-var rep_singer = [1, 1, 1];
-// singer selection method
-var rep_is_union = true;
-// attribute selection
-// (not used)
-var rep_attr = {
-	oke : 1,
-	aca : 1,
-	gui : 1,
-	asm : 1
-};
+
 // anisong selection
 var rep_anisong = {
 	lovelive : [1, 2],
@@ -51,7 +43,7 @@ var rep_genre = {
 	other : [1, 0]
 };
 // sort method
-var rep_sort = "50";
+var rep_sort = "count";
 // sort order
 var rep_sort_asd = true;
 // display info
@@ -66,39 +58,22 @@ var rep_edit_selected = -1;
 
 $(function() {
 	{ // repertoire
+		// input - submit
+		$(document).on("blur", "#rep_input", function() {
+			rep_search();
+		});
+		
+		// input::enter -> blur
+		$(document).on("keydown", function(e) {
+			if (e.keyCode === 13 && current_page === "repertoire") {
+				$("#rep_input").blur();
+			}
+		});
 		// filter - hide_block
 		$(document).on("click", ".filter_title", function() {
 			var e = $(this).attr("id").replace(/(filter_)|(_title)/g, "");
 			$("#filter_" + e + "_close").toggleClass("closed");
 			$("#filter_" + e + "_content").toggleClass("hidden");
-		});
-		
-		// filter - entry - attr
-		$(document).on("click", ".filter_entry_attr_item", function() {
-			var e = $(this).attr("id").replace(/(attr_container_)/, "");
-			if (e === "all") {
-				// if selecting all
-				// check if it is previously selected
-				$(".attr_checkbox").toggleClass("selected", !$("#attr_" + e).hasClass("selected"));
-				for (var i in rep_attr) {
-					rep_attr[i] = $("#attr_" + e).hasClass("selected") ? 1 : 0;
-				}
-			} else {
-				$("#attr_" + e).toggleClass("selected");
-				rep_attr[e] ^= 1;
-				if (!$("#attr_" + e).hasClass("selected")) {
-					$("#attr_all").removeClass("selected");
-				} else {
-					for (var i in rep_attr) {
-						if (!rep_attr[i]) {
-							rep_search();
-							return;
-						}
-					}
-					$("#attr_all").addClass("selected");
-				}
-			}
-			rep_search();
 		});
 		
 		// filter - genre - anisong
@@ -380,9 +355,10 @@ $(function() {
 			$(document.body).toggleClass("no_scroll");
 			// ignore character limit and tweet anyway
 			var tweet = "";
-			for (var i in rep_selected) {
+			for (var i = 0; i < Math.min(rep_selected.length, 5); ++i) {
 				tweet += (song[rep_selected[i]][song_idx.name] + ($("#list_artist_cb").hasClass("selected") ? (" / " + song[rep_selected[i]][song_idx.artist]) : "") + "\n");
 			}
+			tweet += ("\n#" + vote_tag);
 			window.open("https://twitter.com/intent/tweet?text=" + encodeURIComponent(tweet), "_blank");
 		});
 	}
@@ -392,50 +368,69 @@ var rep_hits = [];
 var rep_hits_count = 0;
 
 var rep_selected = [];
+var rep_input_memory = "";
 
 function rep_search() {
-	// all singer pre-load
-	var selected_member = 0;
-	for (var i in rep_singer) {
-		selected_member += rep_singer[i] << i;
-	}
-	if (selected_member === 0) {
-		// clear output
-		$("#rep_display").html("");
+	// check if input is empty
+	var input_value = $("#rep_input").val().normalize("NFKC").trim();
+	// check if input has been updated
+	if (input_value !== rep_input_memory) {
+		//console.log(input_value);
+		rep_input_memory = input_value;
+	} else if (input_value !== "") {
+		// if input didnt changed and is not blank
 		return;
 	}
-	// get mask
-	var mask = 0;
-	rep_hits = [];
-	rep_hits_count = 0;
-	for (var i in rep_anisong) {
-		mask += rep_anisong[i][0] << rep_anisong[i][1];
-	}
-	for (var i in rep_genre) {
-		mask += rep_genre[i][0] << rep_genre[i][1];
-	}
-	// remove flag
-	var inv_mask = 0;
-	for (var i in rep_anisong) {
-		if (i === "other") {
-			continue;
-		}
-		inv_mask += (1 - rep_anisong[i][0]) << rep_anisong[i][1];
-	}
-	// search
-	for (var i = 0; i < song.length; ++i) {
-		if (song[i][song_idx.attr] & mask) {
-			if (inv_mask != 0) {
-				// remove song thats deselected
-				if ((song[i][song_idx.attr] & inv_mask)) {
-					continue;
-				}
-			}
-			// check singer requirement
-			if (rep_is_union ? !(selected_member & rep_list[i]) : (selected_member !== rep_list[i])) {
+	if (input_value !== "") {
+		rep_hits = [];
+		rep_hits_count = 0;
+		// returning search result by input
+		for (var i = 1; i < song.length; ++i) {
+			if (entry_proc[i].length === 0) {
 				continue;
 			}
-			rep_hits[rep_hits_count++] = i;
+			if (song[i][song_idx.name].toLowerCase().search(input_value.toLowerCase()) !== -1 ||
+				song[i][song_idx.reading].search(input_value) !== -1
+				) {
+				rep_hits[rep_hits_count++] = i;
+			}
+		}
+	} else {
+		// returning search result by tag
+		// all singer pre-load
+		var selected_member = 4;
+		// get mask
+		var mask = 0;
+		rep_hits = [];
+		rep_hits_count = 0;
+		for (var i in rep_anisong) {
+			mask += rep_anisong[i][0] << rep_anisong[i][1];
+		}
+		for (var i in rep_genre) {
+			mask += rep_genre[i][0] << rep_genre[i][1];
+		}
+		// remove flag
+		var inv_mask = 0;
+		for (var i in rep_anisong) {
+			if (i === "other") {
+				continue;
+			}
+			inv_mask += (1 - rep_anisong[i][0]) << rep_anisong[i][1];
+		}
+		// search
+		for (var i = 0; i < song.length; ++i) {
+			if (entry_proc[i].length === 0) {
+				continue;
+			}
+			if (song[i][song_idx.attr] & mask) {
+				if (inv_mask != 0) {
+					// remove song thats deselected
+					if ((song[i][song_idx.attr] & inv_mask)) {
+						continue;
+					}
+				}
+				rep_hits[rep_hits_count++] = i;
+			}
 		}
 	}
 	rep_display();
@@ -444,10 +439,7 @@ function rep_search() {
 function rep_display() {
 	// get member
 	$("#rep_display").html("");
-	var selected_member = 0;
-	for (var i in rep_singer) {
-		selected_member += rep_singer[i] << i;
-	}
+	var selected_member = 4;
 	// sort record
 	switch (rep_sort) {
 		case "50" :
@@ -558,7 +550,7 @@ function rep_update_list() {
 	var tweet_length = 0;
 	for (var i = 0; i < rep_selected.length; ++i) {
 		var display_string = song[rep_selected[i]][song_idx.name] + (display_artist ? (" / " + song[rep_selected[i]][song_idx.artist]) : "");
-		new_html += ("<div id=\"list_" + i + "\">" + display_string + "</div>");
+		new_html += ("<div id=\"list_" + i + "\"" + (i < 5 ? " class=\"rep_top5\"" : "") + ">" + display_string + "</div>");
 		for (var j in display_string) {
 			tweet_length += /[ -~]/.test(display_string[j]) ? 1 : 2;
 		}

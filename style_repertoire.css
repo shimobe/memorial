@@ -344,3 +344,7 @@
 .radio:not(.selected) {
 	background-color : DarkBlue;
 }
+
+.rep_top5 {
+	font-weight : bold;
+}

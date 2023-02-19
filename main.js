@@ -40,7 +40,7 @@ var video_idx = {
 	date : 1
 };
 
-var version = "1.2.5";
+var version = "1.3.0";
 
 /* control / memories */
 
@@ -84,15 +84,25 @@ $(document).ready(function() {
 			$("#v_screen").addClass("post_switch");
 			$("#v_screen").height("100%");
 			$("#v_screen").width(0.5625 * window.innerHeight);
-			$("#v_screen").attr("src", "index.html");
+			$("#v_screen").attr("src", "index.html" + window.location.search);
 			// hide original page
 			$("body > div").addClass("post_switch");
 			$("body").addClass("post_switch");
 			return;
 		}
 	}
+	// get url para
+	var url_para = new URLSearchParams(window.location.search);
+	var target_page = url_para.get("page");
 	init();
-	update_visual();
+	if (target_page === "home") {
+		update_visual();
+	} else {
+		if (jump2page(target_page) === -1) {
+			jump2page("home");
+		}
+	}
+	
 	{	// stream, song data
 		$("#home_note_stream").html("(" + stream[stream.length - 1][str_idx.date].slice(0, 10) + "迄)");
 		$("#home_note_song").html("(" + stream[stream.length - 1][str_idx.date].slice(0, 10) + "迄, メン限/非公開/他枠含む)")
@@ -244,76 +254,7 @@ $(function() {
 		// menu -> page
 		$(document).on("click", ".menu2page", function(e) {
 			var target = ($(e.target).attr("id")).replace("menu2page_", "");
-			if (target !== current_page) {
-				current_page = target;
-				$(".menu2page_selected").removeClass("menu2page_selected");
-				$("#" + $(e.target).attr("id")).addClass("menu2page_selected");
-				
-				// show / hide section
-				$(".section_container").addClass("hidden");
-				switch (target) {
-					case "home" : 
-						// show section
-						$("#home_section").removeClass("hidden");
-						$("#nav_title").html("ホーム");
-						$("#nav_search_random").addClass("hidden");
-						$("#nav_share_rep").addClass("hidden");
-						$("#nav_dummy").removeClass("hidden");
-						$(window).scrollTop(0);
-						update_visual(0);
-						break;
-					case "search" :
-						// show section
-						$("#search_section").removeClass("hidden");
-						$("#nav_title").html("曲検索");
-						$("#nav_search_random").removeClass("hidden");
-						$("#nav_share_rep").addClass("hidden");
-						$("#nav_dummy").addClass("hidden");
-						// reset input -> reload
-						$("#input").val("");
-						$(window).scrollTop(0);
-						search();
-						break;
-					case "repertoire" : 
-						// show section
-						$("#repertoire_section").removeClass("hidden");
-						$("#nav_title").html("レパートリー");
-						$("#nav_search_random").addClass("hidden");
-						$("#nav_share_rep").removeClass("hidden");
-						$("#nav_dummy").addClass("hidden");
-						// do whatever needed
-						$(window).scrollTop(0);
-						rep_search();
-						break;
-					case "stream" :
-						// show section
-						$("#stream_section").removeClass("hidden");
-						$("#nav_title").html("配信一覧");
-						$("#nav_search_random").addClass("hidden");
-						$("#nav_share_rep").addClass("hidden");
-						$("#nav_dummy").removeClass("hidden");
-						$(window).scrollTop(0);
-						str_search();
-						break;
-					case "poem" : 
-						// show section
-						$("#poem_section").removeClass("hidden");
-						$("#nav_title").html("百人一首");
-						$("#nav_search_random").addClass("hidden");
-						$("#nav_share_rep").addClass("hidden");
-						$("#nav_dummy").removeClass("hidden");
-						$(window).scrollTop(0);
-						if ($("#poem_display").html() === "") {
-							load_poem();
-						}
-						break;
-				}
-				
-				// close menu
-				$("#menu_container").addClass("hidden");
-				$("#nav_menu").removeClass("menu_opened");
-				$(document.body).removeClass("no_scroll");
-			}
+			jump2page(target);
 		});
 		
 		// menu - information
@@ -536,6 +477,82 @@ function poem_to_html(id) {
 			   .replaceAll( "[", "(")
 			   .replaceAll( "]", ")");
 	return (output + "</div>");
+}
+
+function jump2page(target) {
+	if (target !== current_page) {
+		current_page = target;
+		$(".menu2page_selected").removeClass("menu2page_selected");
+		$("#menu2page_" + target).addClass("menu2page_selected");
+		
+		// show / hide section
+		$(".section_container").addClass("hidden");
+		switch (target) {
+			case "home" : 
+				// show section
+				$("#home_section").removeClass("hidden");
+				$("#nav_title").html("ホーム");
+				$("#nav_search_random").addClass("hidden");
+				$("#nav_share_rep").addClass("hidden");
+				$("#nav_dummy").removeClass("hidden");
+				$(window).scrollTop(0);
+				update_visual(0);
+				break;
+			case "search" :
+				// show section
+				$("#search_section").removeClass("hidden");
+				$("#nav_title").html("曲検索");
+				$("#nav_search_random").removeClass("hidden");
+				$("#nav_share_rep").addClass("hidden");
+				$("#nav_dummy").addClass("hidden");
+				// reset input -> reload
+				$("#input").val("");
+				$(window).scrollTop(0);
+				search();
+				break;
+			case "repertoire" : 
+				// show section
+				$("#repertoire_section").removeClass("hidden");
+				$("#nav_title").html("レパートリー");
+				$("#nav_search_random").addClass("hidden");
+				$("#nav_share_rep").removeClass("hidden");
+				$("#nav_dummy").addClass("hidden");
+				// do whatever needed
+				$(window).scrollTop(0);
+				rep_search();
+				break;
+			case "stream" :
+				// show section
+				$("#stream_section").removeClass("hidden");
+				$("#nav_title").html("配信一覧");
+				$("#nav_search_random").addClass("hidden");
+				$("#nav_share_rep").addClass("hidden");
+				$("#nav_dummy").removeClass("hidden");
+				$(window).scrollTop(0);
+				str_search();
+				break;
+			case "poem" : 
+				// show section
+				$("#poem_section").removeClass("hidden");
+				$("#nav_title").html("百人一首");
+				$("#nav_search_random").addClass("hidden");
+				$("#nav_share_rep").addClass("hidden");
+				$("#nav_dummy").removeClass("hidden");
+				$(window).scrollTop(0);
+				if ($("#poem_display").html() === "") {
+					load_poem();
+				}
+				break;
+			default : 
+				return -1;
+		}
+		
+		// close menu
+		$("#menu_container").addClass("hidden");
+		$("#nav_menu").removeClass("menu_opened");
+		$(document.body).removeClass("no_scroll");
+	}
+	return 0;
 }
 
 // functional functions
