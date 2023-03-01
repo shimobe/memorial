@@ -161,6 +161,7 @@ $(function() {
 		}
 		$("#popup_container").removeClass("hidden");
 		$("#str_info").removeClass("hidden");
+		prevent_menu_popup = true;
 		$(document.body).toggleClass("no_scroll");
 	});
 
