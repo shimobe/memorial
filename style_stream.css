@@ -1,3 +1,10 @@
+#nav_str_info {
+	content : url("icon/questionmark.png");
+	padding: 1vw 2vw 1vw 1vw;
+	width : 8vw;
+	height : 8vw;
+}
+
 #stream_section {
 	margin-top : 10vw;
 }
@@ -97,17 +104,27 @@
 	content : url("icon/str_minus.png");
 }
 
-
 .str_display_item {
-	background-color : FireBrick;
 	margin : 2vw;
 	border-radius : 3vw;
 	font-size : 4vw;
 	padding : 1.2vw;
 }
 
-.str_display_item.private {
-	background-color : #6F0000;
+.str_type_0 {
+	background-color : FireBrick;
+}
+
+.str_type_1 {
+	background-color : DarkBlue;
+}
+
+.str_type_2 {
+	background-color : Purple;
+}
+
+.str_type_3 {
+	background-color : Black;
 }
 
 .str_item_1stline {
@@ -208,4 +225,36 @@
 
 .str_icon_mem_9 {
 	content : url("icon/member/9.jpg");
+}
+
+
+#str_info {
+	top : 0;
+	position : absolute;
+	width : 100%;
+	height : 100%;
+	background-color : rgba(31, 31, 31, 0.5);
+}
+
+#str_info_defog {
+	position : absolute;
+	left : 50%;
+	top : 50%;
+	transform: translate(-50%, -50%);
+	width : 70vw;
+	height : 88vw;
+	background-color : MediumPurple;
+	color : Snow;
+	font-size : 4vw;
+	text-align : center;
+	border: none;
+	border-radius: 2vw;
+}
+
+#str_info_defog>div {
+	margin : 2.4vw auto;
+	padding : 2vw;
+	width : 70%;
+	font-weight : bold;
+	border-radius : 2vw;
 }

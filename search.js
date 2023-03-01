@@ -90,20 +90,34 @@ $(function() {
 		// search - entry - share
 		$(document).on("click", ".entry_share", function() {
 			var entry_id = parseInt($(this).attr("id").replace("entry_", ""));
+			var video_type = processed_str_type[entry_id];
+			if (video_type >= 2) {
+				alert("非公開動画のため共有できません。");
+				return;
+			}
 			// get video title
-			const url = "https://www.youtube.com/watch?v=" + video[entry[entry_id][entry_idx.video]][video_idx.id];
-
-			fetch("https://noembed.com/embed?dataType=json&url=" + url)
-				.then(res => res.json())
-				.then(function(data) {
-					// title of unlisted / private video are returned a 401 error
-					if (data.title === undefined) {
-						alert("非公開の動画を共有しないで下さい。");
-					} else {
-						var tweet = song[entry[entry_id][entry_idx.song_id]][song_idx.name].trim() + " / " + song[entry[entry_id][entry_idx.song_id]][song_idx.artist] + " @" + data.title + "\n(youtu.be/" + video[entry[entry_id][entry_idx.video]][video_idx.id] + "?t=" + entry[entry_id][entry_idx.time] + ")";
-						window.open("https://twitter.com/intent/tweet?text=" + encodeURIComponent(tweet), "_blank");
-					}
-			  });
+			var vid_id = video[entry[entry_id][entry_idx.video]][video_idx.id];
+			var vid_title = null;
+			for (var i in stream) {
+				if (stream[i][str_idx.id] === vid_id) {
+					vid_title = stream[i][str_idx.title];
+					break;
+				}
+			}
+			if (vid_title === null) {
+				alert("failed to find video title.");
+				return;
+			}
+			var tweet = song[entry[entry_id][entry_idx.song_id]][song_idx.name].trim() + " / " + song[entry[entry_id][entry_idx.song_id]][song_idx.artist] + " @" + vid_title + "\n";
+			if (video_type) {
+				// ragtag
+				tweet += ("archive.ragtag.moe/watch?v=" + video[entry[entry_id][entry_idx.video]][video_idx.id] + "\n(" + to_hmmss(entry[entry_id][entry_idx.time]) + ")");
+			} else {
+				// youtube
+				tweet += ("(youtu.be/" + video[entry[entry_id][entry_idx.video]][video_idx.id] + (entry[entry_id][entry_idx.time] === 0 ? "" : ("?t=" + entry[entry_id][entry_idx.time])) + ")");
+			}
+			
+			window.open("https://twitter.com/intent/tweet?text=" + encodeURIComponent(tweet), "_blank");
 		});
 	}
 });
@@ -406,7 +420,8 @@ function update_display() {
 				note = note.replace(/【メン限】/g, "");
 			}
 		}
-		new_html += ("<div class=\"entry_container singer_" + entry[hits[i]][entry_idx.type] + (is_mem ? "m" : "") + " song_" + current_song + (hide_song.includes(current_song) ? " hidden" : "") + "\"><a href=\"https://youtu.be/" + video[entry[hits[i]][entry_idx.video]][video_idx.id] + (entry[hits[i]][entry_idx.time] === 0 ? "" : ("?t=" + entry[hits[i]][entry_idx.time])) +"\" target=\"_blank\"><div class=\"entry_primary\"><div class=\"entry_date\">" + display_date(video[entry[hits[i]][entry_idx.video]][video_idx.date]) + "</div><div class=\"entry_singer\">" + singer_lookup[entry[hits[i]][entry_idx.type]] + "</div><div class=\"mem_display\">" + (is_mem ? "メン限" : "") + "</div><div class=\"entry_share\" id=\"entry_" + hits[i] + "\" onclick=\"return false;\"></div></div>" + (no_note ? "" : ("<div class=\"entry_note\">" + note + "</div>")) + "</a></div>");
+		// get stream[] id from video[] id
+		new_html += ("<div class=\"entry_container singer_" + entry[hits[i]][entry_idx.type] + (is_mem ? "m" : "") + " song_" + current_song + (hide_song.includes(current_song) ? " hidden" : "") + "\"><a href=\"" + (processed_str_type[stream_lookup[entry[hits[i]][entry_idx.video]]] === 1 ? "https://archive.ragtag.moe/watch?v=" : "https://youtu.be/") + video[entry[hits[i]][entry_idx.video]][video_idx.id] + (entry[hits[i]][entry_idx.time] === 0 ? "" : ("&t=" + entry[hits[i]][entry_idx.time])) +"\" target=\"_blank\"><div class=\"entry_primary\"><div class=\"entry_date\">" + display_date(video[entry[hits[i]][entry_idx.video]][video_idx.date]) + "</div><div class=\"entry_singer\">" + singer_lookup[entry[hits[i]][entry_idx.type]] + "</div><div class=\"mem_display\">" + (is_mem ? "メン限" : "") + "</div><div class=\"entry_share\" id=\"entry_" + hits[i] + "\" onclick=\"return false;\"></div></div><div class=\"entry_note\">" + to_hmmss(entry[hits[i]][entry_idx.time]) +　(no_note ? "" : ("　　" + note)) + "</div></a></div>");
 		if (++displayed >= max_display) {
 			break;
 		}

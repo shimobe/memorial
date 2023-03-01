@@ -57,6 +57,15 @@ var processed_title = [];
  * [2] : member in video, 0 if not collab
  *
  */
+ var processed_str_type = [];
+/* type list
+ * 0 : available on youtube
+ * 1 : available on ragtag
+ * 2 : downloaded archive
+ * 3 : lost in time
+ */
+ var stream_lookup = [];
+ 
 $(document).ready(function() {
 	for (var i in stream) {
 		processed_title[i] = [, , 0];
@@ -98,12 +107,73 @@ $(document).ready(function() {
 				processed_title[i][2] = 0b0110000000;
 			}
 		}
-		
-
+	}
+	
+	// stream availability type
+	for (var i in stream) {
+		var type = 0;
+		// if does not contain "other-collab" attr -> must not be on youtube
+		if (!(stream[i][str_idx.attr] & to_mask(str_attr.othercolab))) {
+			type = 1;
+		}
+		// if member only
+		if (stream[i][str_idx.attr] & to_mask(str_attr.member)) {
+			type = 2;
+		}
+		// if stream have state of 2, 3 or 4
+		switch (stream[i][str_idx.state]) {
+			case 1 : 
+				type = 1;
+				break;
+			case 2 : 
+				type = 2;
+				break;
+			case 3 :
+			case 4 :
+				type = 3;
+				break;
+			default : 
+				break;
+		}
+		processed_str_type[i] = type;
+	}
+	// load stream lookup
+	for (var i = 0; i < video.length; ++i) {
+		var vid_id = video[i][video_idx.id];
+		if (vid_id === "yvOltxXI85M") {
+			vid_id = "eIkEjr2IH_8";
+		}
+		// -2 to counter streams in the same day are not sorted correctly
+		for (var j = (i === 0 ? 0 : stream_lookup[i - 1] - 2); j < stream.length; ++j) {
+			if (vid_id === stream[j][str_idx.id]) {
+				stream_lookup[i] = j;
+				break;
+			}
+		}
 	}
 });
 
 $(function() {
+	// nav - info
+	$(document).on("click", "#nav_str_info", function() {
+		if (prevent_menu_popup) {
+			return;
+		}
+		$("#popup_container").removeClass("hidden");
+		$("#str_info").removeClass("hidden");
+		$(document.body).toggleClass("no_scroll");
+	});
+
+	// nav - info -fog> return
+	$(document).on("click", "#str_info", function(e) {
+		if ($(e.target).attr("id") === "str_info") {
+			$("#str_info").addClass("hidden");
+			$("#popup_container").addClass("hidden");
+			$(document.body).removeClass("no_scroll");
+			prevent_menu_popup = false;
+		}
+	});
+	
 	// input - submit
 	$(document).on("blur", "#str_input", function() {
 		str_search();
@@ -222,10 +292,24 @@ $(function() {
 	});
 	
 	// click to video
-	$(document).on("click", ".str_display_item", function() {
-		var e = parseInt($(this).attr("id"));
-		if (stream[e][str_idx.state] === 0) {
-			window.open("https://youtu.be/" + stream[e][str_idx.id], "_blank");
+	$(document).on("click", ".str_display_item", function(e) {
+		var type = 2;
+		if (e.target.closest(".str_type_0") !== null) {
+			type = 0;
+		}
+		if (e.target.closest(".str_type_1") !== null) {
+			type = 1;
+		}
+		var vid_idx = parseInt($(this).attr("id"));
+		switch (type) {
+			case 0 : 
+				window.open("https://youtu.be/" + stream[vid_idx][str_idx.id], "_blank");
+				break;
+			case 1 : 
+				window.open("https://archive.ragtag.moe/watch?v=" + stream[vid_idx][str_idx.id], "_blank");
+				break;
+			default : 
+				break;
 		}
 	})
 });
@@ -313,7 +397,7 @@ function str_display() {
 	
 	for (var i in str_sorted) {
 		// outer block
-		new_html += "<div class=\"str_display_item" + (stream[str_sorted[i]][str_idx.state] === 0 ? "" : " private") + "\" id=\"" + str_sorted[i] + "\">";
+		new_html += "<div class=\"str_display_item str_type_" + processed_str_type[str_sorted[i]] + "\" id=\"" + str_sorted[i] + "\">";
 		// 1st line - date
 		new_html += ("<div class=\"str_item_1stline\"><div class=\"str_item_date\">" + stream[str_sorted[i]][str_idx.date] + "</div>");
 		// 1st line - length

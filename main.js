@@ -40,7 +40,7 @@ var video_idx = {
 	date : 1
 };
 
-var version = "1.3.0";
+var version = "1.4.0";
 
 /* control / memories */
 
@@ -494,6 +494,7 @@ function jump2page(target) {
 				$("#nav_title").html("ホーム");
 				$("#nav_search_random").addClass("hidden");
 				$("#nav_share_rep").addClass("hidden");
+				$("#nav_str_info").addClass("hidden");
 				$("#nav_dummy").removeClass("hidden");
 				$(window).scrollTop(0);
 				update_visual(0);
@@ -504,6 +505,7 @@ function jump2page(target) {
 				$("#nav_title").html("曲検索");
 				$("#nav_search_random").removeClass("hidden");
 				$("#nav_share_rep").addClass("hidden");
+				$("#nav_str_info").addClass("hidden");
 				$("#nav_dummy").addClass("hidden");
 				// reset input -> reload
 				$("#input").val("");
@@ -516,6 +518,7 @@ function jump2page(target) {
 				$("#nav_title").html("レパートリー");
 				$("#nav_search_random").addClass("hidden");
 				$("#nav_share_rep").removeClass("hidden");
+				$("#nav_str_info").addClass("hidden");
 				$("#nav_dummy").addClass("hidden");
 				// do whatever needed
 				$(window).scrollTop(0);
@@ -527,7 +530,8 @@ function jump2page(target) {
 				$("#nav_title").html("配信一覧");
 				$("#nav_search_random").addClass("hidden");
 				$("#nav_share_rep").addClass("hidden");
-				$("#nav_dummy").removeClass("hidden");
+				$("#nav_str_info").removeClass("hidden");
+				$("#nav_dummy").addClass("hidden");
 				$(window).scrollTop(0);
 				str_search();
 				break;
@@ -537,6 +541,7 @@ function jump2page(target) {
 				$("#nav_title").html("百人一首");
 				$("#nav_search_random").addClass("hidden");
 				$("#nav_share_rep").addClass("hidden");
+				$("#nav_str_info").addClass("hidden");
 				$("#nav_dummy").removeClass("hidden");
 				$(window).scrollTop(0);
 				if ($("#poem_display").html() === "") {
@@ -604,11 +609,13 @@ function to8601(date_string) {
 	);
 }
 
+var today = new Date().setHours(0, 0, 0, 0);
+
 // get day different between {date1 and date2} or {date1 and today}
-function get_date_different(date1, date2) {
+function get_date_different(date1, date2 = today) {
 	date1 = (typeof(date1) === "string") ? new Date(date1) : date1;
-	date2 = date2 === undefined ? new Date() : new Date(date2);
-	return Math.round(Math.abs(date1.getTime() - date2.getTime()) / 86400000);
+	date2 = date2 === undefined ? date2 : new Date(date2);
+	return Math.round(Math.abs(date1 - date2) / 86400000);
 }
 
 // get entry count of all entry and member-only entry that fufills mask
@@ -639,14 +646,3 @@ function get_attr(id) {
 	}
 	return "oke";
 }
-
-/*
- * to do
- * search by attr mode
- * editing request list
- * copy to clip board
- * copied to clipboard message pop up
- *
- *
- *
- */
