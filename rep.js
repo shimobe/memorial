@@ -358,7 +358,8 @@ $(function() {
 			for (var i = 0; i < Math.min(rep_selected.length, 5); ++i) {
 				tweet += (song[rep_selected[i]][song_idx.name] + ($("#list_artist_cb").hasClass("selected") ? (" / " + song[rep_selected[i]][song_idx.artist]) : "") + "\n");
 			}
-			tweet += ("\n#" + vote_tag);
+			tweet += "\n#うたってきららちゃま";
+			//tweet += ("\n#" + vote_tag);
 			window.open("https://twitter.com/intent/tweet?text=" + encodeURIComponent(tweet), "_blank");
 		});
 	}

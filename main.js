@@ -487,16 +487,20 @@ function jump2page(target) {
 		
 		// show / hide section
 		$(".section_container").addClass("hidden");
+		
+		// hide all icon
+		$("#nav_search_random").addClass("hidden");
+		$("#nav_share_rep").addClass("hidden");
+		$("#nav_str_info").addClass("hidden");
+		$("#nav_dummy").addClass("hidden");
+		$(window).scrollTop(0);
+		
 		switch (target) {
 			case "home" : 
 				// show section
 				$("#home_section").removeClass("hidden");
 				$("#nav_title").html("ホーム");
-				$("#nav_search_random").addClass("hidden");
-				$("#nav_share_rep").addClass("hidden");
-				$("#nav_str_info").addClass("hidden");
 				$("#nav_dummy").removeClass("hidden");
-				$(window).scrollTop(0);
 				update_visual(0);
 				break;
 			case "search" :
@@ -504,46 +508,29 @@ function jump2page(target) {
 				$("#search_section").removeClass("hidden");
 				$("#nav_title").html("曲検索");
 				$("#nav_search_random").removeClass("hidden");
-				$("#nav_share_rep").addClass("hidden");
-				$("#nav_str_info").addClass("hidden");
-				$("#nav_dummy").addClass("hidden");
 				// reset input -> reload
 				$("#input").val("");
-				$(window).scrollTop(0);
 				search();
 				break;
 			case "repertoire" : 
 				// show section
 				$("#repertoire_section").removeClass("hidden");
 				$("#nav_title").html("レパートリー");
-				$("#nav_search_random").addClass("hidden");
 				$("#nav_share_rep").removeClass("hidden");
-				$("#nav_str_info").addClass("hidden");
-				$("#nav_dummy").addClass("hidden");
-				// do whatever needed
-				$(window).scrollTop(0);
 				rep_search();
 				break;
 			case "stream" :
 				// show section
 				$("#stream_section").removeClass("hidden");
 				$("#nav_title").html("配信一覧");
-				$("#nav_search_random").addClass("hidden");
-				$("#nav_share_rep").addClass("hidden");
 				$("#nav_str_info").removeClass("hidden");
-				$("#nav_dummy").addClass("hidden");
-				$(window).scrollTop(0);
 				str_search();
 				break;
 			case "poem" : 
 				// show section
 				$("#poem_section").removeClass("hidden");
 				$("#nav_title").html("百人一首");
-				$("#nav_search_random").addClass("hidden");
-				$("#nav_share_rep").addClass("hidden");
-				$("#nav_str_info").addClass("hidden");
 				$("#nav_dummy").removeClass("hidden");
-				$(window).scrollTop(0);
 				if ($("#poem_display").html() === "") {
 					load_poem();
 				}
