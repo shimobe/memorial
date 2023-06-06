@@ -148,6 +148,8 @@ $(document).ready(function() {
 		} while (!(loaded_records >= 10 && lastest_count != entry_proc[e[loaded_records + 1]].length));
 		$(".home_gridsong").html(new_html);
 	}
+	// remove loading screen
+	$("#loading_overlay").addClass("hidden");
 });
 
 $(function() {

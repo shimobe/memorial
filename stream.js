@@ -114,11 +114,11 @@ $(document).ready(function() {
 		var type = 0;
 		// if does not contain "other-collab" attr -> must not be on youtube
 		if (!(stream[i][str_idx.attr] & to_mask(str_attr.othercolab))) {
-			type = 1;
+			type = 0;
 		}
 		// if member only
 		if (stream[i][str_idx.attr] & to_mask(str_attr.member)) {
-			type = 2;
+			type = 0;
 		}
 		// if stream have state of 2, 3 or 4
 		switch (stream[i][str_idx.state]) {
@@ -142,6 +142,9 @@ $(document).ready(function() {
 		var vid_id = video[i][video_idx.id];
 		if (vid_id === "yvOltxXI85M") {
 			vid_id = "eIkEjr2IH_8";
+		}
+		if (vid_id === "0sdJVJ1Q5Hg") {
+			vid_id = "e2SjD7QDvKg";
 		}
 		// -2 to counter streams in the same day are not sorted correctly
 		for (var j = (i === 0 ? 0 : stream_lookup[i - 1] - 2); j < stream.length; ++j) {
