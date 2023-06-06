@@ -1,15 +1,4 @@
 /* overall section ~start~ */
-@font-face {
-	font-family : MPLUS1p;
-	src : url("M_PLUS_1p/MPLUS1p-Regular.ttf") format("truetype");
-}
-
-@font-face {
-	font-family : MPLUS1p;
-	src : url("M_PLUS_1p/MPLUS1p-ExtraBold.ttf") format("truetype");
-	font-weight : bold;
-}
-
 html, body {
 	padding : 0px;
 	margin : 0px;
@@ -19,7 +8,7 @@ html, body {
 
 html {
 	background-color : LightSlateGrey;
-	font-family : MPLUS1p;
+	font-family: 'M PLUS 1p', sans-serif;
 }
 
 body:not(#input) {
