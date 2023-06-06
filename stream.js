@@ -141,10 +141,10 @@ $(document).ready(function() {
 	for (var i = 0; i < video.length; ++i) {
 		var vid_id = video[i][video_idx.id];
 		if (vid_id === "yvOltxXI85M") {
-			vid_id = "eIkEjr2IH_8";
+			video[i][video_idx.id] = "eIkEjr2IH_8";
 		}
 		if (vid_id === "0sdJVJ1Q5Hg") {
-			vid_id = "e2SjD7QDvKg";
+			video[i][video_idx.id] = "e2SjD7QDvKg";
 		}
 		// -2 to counter streams in the same day are not sorted correctly
 		for (var j = (i === 0 ? 0 : stream_lookup[i - 1] - 2); j < stream.length; ++j) {
